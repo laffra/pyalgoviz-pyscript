@@ -25,9 +25,9 @@ def line(x1, y1, x2, y2, color, w):
     viz.append(f"line({x1}, {y1}, {x2}, {y2}, {repr(color)}, {w})")
 
 
-def text(x, y, s, size=14, font="Courier", style="normal", color="black"):
+def text(x, y, txt, size=14, font="Courier", color="black"):
     """ Draw a text """
-    viz.append(f"text({x}, {y}, {repr(s)}, {size}, {repr(font)}, {repr(style)}, {repr(color)})")
+    viz.append(f"text({x}, {y}, {repr(txt)}, {size}, {repr(font)}, {repr(color)})")
 
 
 def rect(x, y, w, h, color):

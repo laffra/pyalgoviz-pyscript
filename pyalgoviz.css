@@ -19,6 +19,10 @@
     min-width: 0;
 }
 
+.step-label {
+    min-width: 20px;
+}
+
 .editor_line {
     background-color: rgb(207, 214, 217)
 }

@@ -136,7 +136,6 @@ class Editor(ltk.Div):
             error (str): The error message to display.
         """
         self.clear_mark()
-        print("mark_line", lineno, error)   
         self.marker = self.editor.getDoc().markText(
             ltk.to_js({ "line": lineno, "ch": 0}),
             ltk.to_js({ "line": lineno, "ch": 200}),
