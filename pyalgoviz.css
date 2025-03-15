@@ -18,3 +18,7 @@
 .ltk-button {
     min-width: 0;
 }
+
+.editor_line {
+    background-color: rgb(207, 214, 217)
+}

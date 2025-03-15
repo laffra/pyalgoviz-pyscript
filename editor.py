@@ -27,6 +27,7 @@ class Editor(ltk.Div):
     def __init__(self, value=""):
         ltk.Div.__init__(self)
         self.editor = None
+        self.marker = None
         self.code_completor = None
         ltk.schedule(lambda: self.set(value), f"set value {id(self)}")
         ltk.schedule(self.refresh, f"force editor redraw {id(self)}")
@@ -122,7 +123,8 @@ class Editor(ltk.Div):
         """
         Clears the current line marker from the editor. Used to show the location of syntax errors.
         """
-        ltk.window.editorClearLine()
+        if self.marker:
+            self.marker.clear()
 
     def mark_line(self, lineno, error):
         """
@@ -133,8 +135,13 @@ class Editor(ltk.Div):
             lineno (int): The line number to mark, starting from 1.
             error (str): The error message to display.
         """
-        ltk.window.editorMarkLine(1, error)
-        ltk.window.editorMarkLine(lineno - 1, error)
+        self.clear_mark()
+        print("mark_line", lineno, error)   
+        self.marker = self.editor.getDoc().markText(
+            ltk.to_js({ "line": lineno, "ch": 0}),
+            ltk.to_js({ "line": lineno, "ch": 200}),
+            ltk.to_js({ "className": "editor_line" }),
+        )
 
     def start_running(self):
         """

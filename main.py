@@ -71,7 +71,9 @@ def show():
         return
     step = state.steps[state.step]
     state.step += 1
-    ltk.find(".visualization").html(str(step[0]) + "\n" + "\n".join(step[1]))
+    lineno, viz = step
+    ltk.find(".visualization").html(str(lineno) + "\n" + "\n".join(viz))
+    editor_algo.mark_line(lineno - 1, "")
     ltk.schedule(show, f"show step {state.step}", state.speed_delay)
 
 
