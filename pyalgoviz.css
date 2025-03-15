@@ -1,0 +1,20 @@
+
+.main, .editor, .column, .preview, .log {
+    width: calc(100vw - 4px);
+    height: calc(100vh - 4px);
+    border: 1px solid gray;
+}
+
+.controls {
+    gap: 8px;
+    padding: 8px;
+}
+
+.speed {
+    width: 150px;
+    margin: 4px;
+}
+
+.ltk-button {
+    min-width: 0;
+}
