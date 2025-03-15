@@ -47,29 +47,39 @@ def changed(_event=None):
 
 editor_algo.on("change", changed)
 
-class Recording():
-    """ A recording of the current algorithm """
-    speed = 0.001
+
+class State(ltk.Model):
+    """ The state for the algorithm visualization """
+    speed_human = 2
+    speed_delay = 0.01
     step = 0
     steps = []
 
-recording = Recording()
+    def changed(self, name, value):
+        if name == "speed_human":
+            self.speed_delay = [0.2, 0.05, 0.01][self.speed_human]
+            state.step = 0
+            show()
+
+
+state = State()
 
 
 def show():
     """ Show the current algorithm """
-    if recording.step >= len(recording.steps):
+    if state.step >= len(state.steps.value):
         return
-    step = recording.steps[recording.step]
-    recording.step += 1
+    step = state.steps[state.step]
+    state.step += 1
     ltk.find(".visualization").html(str(step[0]) + "\n" + "\n".join(step[1]))
-    ltk.schedule(show, f"show step {recording.step}", recording.speed)
+    ltk.schedule(show, f"show step {state.step}", state.speed_delay)
+
 
 def visualize(data):
     """ Visualize the current algorithm """
-    print("Got data", type(data), len(data))
-    recording.steps = data
-    recording.step = 0
+    print("Show", state.speed_delay)
+    state.steps = data
+    state.step = 0
     show()
 
 
@@ -90,13 +100,14 @@ ltk.find("body").append(
                 ltk.HBox(
                     ltk.Button("run", run),
                     auto_run,
-                    ltk.Select(["Slow", "Medium", "Fast"], "Medium"),
+                    ltk.Select(["Slow", "Medium", "Fast"], state.speed_human)
+                        .addClass("speed"),
                     ltk.Button("prev", ltk.proxy(lambda _event: None)),
                     ltk.Button("play", ltk.proxy(lambda _event: None)),
                     ltk.Button("next", ltk.proxy(lambda _event: None)),
                     ltk.Button("save", ltk.proxy(lambda _event: None)),
                     ltk.Slider(30, 0, 100)
-                         .addClass("speed"),
+                         .addClass("progress"),
                 ).addClass("controls"),
             ),
             editor_viz,

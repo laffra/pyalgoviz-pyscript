@@ -6,6 +6,7 @@ code, find dependencies, and perform code completion.
 """
 
 # pylint: disable=import-error
+# pylint: disable=global-statement
 # pylint: disable=exec-used
 # pylint: disable=broad-except
 # pylint: disable=unused-argument
@@ -36,7 +37,6 @@ def rect(x, y, w, h, color):
 
 def barchart(x, y, w, h, data, highlight, scale=1):
     """ Draw a barchart """
-    print("barchart", data)
     viz.append(f"barchart({x}, {y}, {w}, {h}, {repr(data)}, {highlight}, {scale})")
 
 
@@ -58,16 +58,21 @@ def handle_request(sender, topic, request):
             }
 
             def step(frame, event, arg):
-                viz.clear()
+                global viz
+                viz = []
                 lineno = frame.f_lineno
+                filename = frame.f_code.co_filename
+                if filename != "<string>":
+                    return step
                 state.update(frame.f_locals)
                 try:
                     exec(visualization, state, state)
                 except Exception as e:
                     viz.append(f"error('''{e}''')")
                 result.append([ lineno, viz ])
+                return step
 
-            sys.setprofile(step)
+            sys.settrace(step)
             exec(script, state, state)
             response = "visualize"
         except Exception as e:
