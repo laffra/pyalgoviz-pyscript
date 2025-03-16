@@ -68,7 +68,7 @@ def handle_request(sender, topic, request):
                 try:
                     exec(visualization, state, state)
                 except Exception as e:
-                    viz.append(f"error('''{e}''')")
+                    viz.append(f"error(\"{e}\")")
                 result.append([ lineno, viz ])
                 return step
 

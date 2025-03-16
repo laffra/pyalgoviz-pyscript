@@ -1,8 +1,6 @@
 [files]
 
-"lsp.py" = "lsp.py"
 "editor.py" = "editor.py"
-"drawing.py" = "drawing.py"
 
 "https://raw.githubusercontent.com/pyscript/ltk/main/ltk/jquery.py" = "ltk/jquery.py"
 "https://raw.githubusercontent.com/pyscript/ltk/main/ltk/widgets.py" = "ltk/widgets.py"

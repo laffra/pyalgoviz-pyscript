@@ -13,7 +13,6 @@ Copyright (c) 2024 laffra - All Rights Reserved.
 
 from polyscript import XWorker # type: ignore   pylint: disable=import-error
 import ltk
-import drawing
 from editor import Editor
 
 
@@ -47,7 +46,7 @@ class State(ltk.Model):
 
     def changed(self, name, value):
         if name == "speed_human":
-            delay = [0.2, 0.05, 0][self.speed_human]
+            delay = [0.1, 0.01, 0][self.speed_human]
             self.speed_delay = delay
             if state.auto_run:
                 show(0)
@@ -75,8 +74,8 @@ def run(_event=None):
         "run",
         [editor_algo.get(), editor_viz.get()]
     )
-    drawing.clear()
-    drawing.text(25, 25, "Running...", color="green")
+    ltk.window.clear()
+    ltk.window.text(25, 25, "Running...", color="green")
 
 @ltk.callback
 def changed(_event=None):
@@ -94,13 +93,13 @@ def render_current():
         return
     step = state.steps[state.step]
     lineno, viz = step
-    drawing.clear()
+    ltk.window.clear()
     try:
-        exec("\n".join(viz), drawing.primitives, {})
+        ltk.window.render(viz)
     except Exception as e:
         print("error", e)
-        drawing.text(10, 10, str(e), color="red")
-    editor_algo.mark_line(lineno - 1, "")
+        ltk.window.text(10, 10, str(e), color="red")
+    editor_algo.mark_line(lineno - 1)
 
 
 def show(step=-1):
@@ -122,8 +121,8 @@ def visualize(data):
     state.steps = data
     state.step_count = len(data)
     progress.element.slider("option", "max", str(state.step_count))
-    drawing.init()
-    drawing.text(25, 25, "Loading...", color="blue")
+    ltk.window.init()
+    ltk.window.text(25, 25, "Loading...", 12, "Arial", "blue")
     ltk.schedule(lambda: show(0), "show step 0", 1)
 
 
@@ -184,19 +183,12 @@ ltk.find("body").append(
     .addClass("main")
 )
 
+ltk.window.init()
 config = {
     "interpreter": "pyodide/pyodide.js",
     "packages": [ 
     ],
     "files": {
-        "lsp.py": "lsp.py",
-        "https://raw.githubusercontent.com/pyscript/ltk/main/ltk/jquery.py": "ltk/jquery.py",
-        "https://raw.githubusercontent.com/pyscript/ltk/main/ltk/widgets.py": "ltk/widgets.py",
-        "https://raw.githubusercontent.com/pyscript/ltk/main/ltk/pubsub.py": "ltk/pubsub.py",
-        "https://raw.githubusercontent.com/pyscript/ltk/main/ltk/__init__.py": "ltk/__init__.py",
-        "https://raw.githubusercontent.com/pyscript/ltk/main/ltk/logger.py": "ltk/logger.py",
-        "https://raw.githubusercontent.com/pyscript/ltk/main/ltk/ltk.js": "ltk/ltk.js",
-        "https://raw.githubusercontent.com/pyscript/ltk/main/ltk/ltk.css": "ltk/ltk.css",
     }
 }
 worker = XWorker("worker.py", config=ltk.to_js(config), type="pyodide")

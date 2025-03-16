@@ -5,7 +5,6 @@ A wrapper for the CodeMirror editor.
 """
 
 import ltk
-import lsp
 
 
 class Editor(ltk.Div):
@@ -45,23 +44,12 @@ class Editor(ltk.Div):
                 },
                 "lineNumbers": True,
                 "indentUnit": 4,
-                "extraKeys": {
-                    "Ctrl-Space": "autocomplete"
-                },
                 "matchBrackets": True,
             }))
             self.editor.setSize("100%", "100%")
             self.editor.on("blur", ltk.proxy(lambda *args: self.trigger("change")))
             self.editor.on("change", ltk.proxy(lambda *args: self.clear_mark()))
             self.editor.on("keyup", ltk.proxy(lambda *args: self.trigger("change")))
-            self.editor.on('inputRead', ltk.proxy(lambda *args: self.complete()))
-            self.code_completor = lsp.CodeCompletor(self.editor)
-
-    def complete(self):
-        """
-        Handles code completion for the editor.
-        """
-        self.code_completor.trigger_completion()
 
     def get(self):
         """
@@ -126,7 +114,7 @@ class Editor(ltk.Div):
         if self.marker:
             self.marker.clear()
 
-    def mark_line(self, lineno, error):
+    def mark_line(self, lineno):
         """
         Marks the specified line number in the editor with a visual indicator. 
         Used to show the location of syntax errors.
