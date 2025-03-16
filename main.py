@@ -16,6 +16,7 @@ import ltk
 import editor
 
 ALGORITHM = "# Your algorithm goes here."
+CLICK_LOAD = "# Your algorithm goes here.\n\n# Click Load... for an existing example."
 VISUALIZATION = "# Your visualization logic goes here."
 
 class State(ltk.Model):
@@ -26,6 +27,7 @@ class State(ltk.Model):
     steps = []
     step_count = 0
     auto_run = True
+    choices = []
 
     def changed(self, name, value):
         if name == "speed_human":
@@ -124,11 +126,33 @@ def next_step(_event=None):
     state.step = min(len(state.steps.value) - 1, state.step + 1)
 
 
+def load(_event=None):
+    """ Load an existing algorithm """
+
+    @ltk.callback
+    def load_algo(event):
+        button = ltk.find(event.target)
+        ltk.window.location = f"?name={button.text()}"
+
+    ltk.Div([
+        ltk.Button(name, load_algo)
+        for name in state.choices
+    ]).attr("title", "Load...").dialog()
+
+
 def load_source(sources):
     """ Load the algorithm and visualization """
     algo, viz = sources
     editor_algo.set(algo)
     editor_viz.set(viz)
+
+
+def save_choices(choices):
+    """ Save the algorithms the user can choose from """
+    state.choices = choices
+    ltk.find("#load-button").attr("disabled", False)
+    if "name=" not in ltk.window.location.href:
+        editor_algo.set(CLICK_LOAD)
 
 
 def setup_ui():
@@ -143,11 +167,14 @@ def setup_ui():
                         auto_run,
                         ltk.Select(["Slow", "Medium", "Fast"], state.speed_human)
                             .addClass("speed"),
-                        ltk.Button("prev", previous_step),
+                        ltk.Button("Prev", previous_step),
                         ltk.Label("Step:"),
                         ltk.Label(state.step).addClass("step-label"),
                         progress.addClass("progress"),
-                        ltk.Button("next", next_step),
+                        ltk.Button("Next", next_step),
+                        ltk.Button("Load...", load)
+                            .attr("id", "load-button")
+                            .attr("disabled", True),
                     ).addClass("controls"),
                 ),
                 editor_viz,
@@ -178,6 +205,7 @@ def setup_worker():
     ltk.subscribe("Main", "error", show_error)
     ltk.subscribe("Main", "ready", run)
     ltk.subscribe("Main", "source", load_source)
+    ltk.subscribe("Main", "choices", save_choices)
     config = {
         "interpreter": "pyodide/pyodide.js",
         "packages": [ 

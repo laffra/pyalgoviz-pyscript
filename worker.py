@@ -71,6 +71,16 @@ def load_algorithm():
                 getsource(module.visualization),
             ]
         )
+    polyscript.xworker.sync.publish(
+        "Worker",
+        "Main",
+        "choices",
+        [
+            key
+            for key, value in visualizations.__dict__.items()
+            if inspect.ismodule(value)
+        ]
+    )
 
 
 def handle_request(sender, topic, request):
