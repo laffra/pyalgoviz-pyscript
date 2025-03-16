@@ -47,7 +47,7 @@ class Editor(ltk.Div):
                 "indentUnit": 4,
                 "matchBrackets": True,
             }))
-            self.editor.setSize("100%", "100%")
+            self.editor.setSize("100%", "calc(100% - 35px)")
             self.editor.on("blur", ltk.proxy(lambda *args: self.trigger("change")))
             self.editor.on("change", ltk.proxy(lambda *args: self.clear_mark()))
             self.editor.on("keyup", ltk.proxy(lambda *args: self.trigger("change")))

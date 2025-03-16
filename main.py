@@ -178,7 +178,7 @@ def setup_ui():
                             .attr("id", "load-button")
                             .attr("disabled", True),
                     ).addClass("controls"),
-                ),
+                ).addClass("top-left"),
                 editor_viz,
                 "editors",
             ).addClass("column"),

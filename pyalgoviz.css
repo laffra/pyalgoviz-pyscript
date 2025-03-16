@@ -5,9 +5,18 @@
     border: 1px solid gray;
 }
 
+.top-left {
+    position: relative;
+}
+
 .controls {
+    position: absolute;
     gap: 8px;
+    width: 100%;
     padding: 8px;
+    bottom: 0;
+    background-color: white;
+    border: 1px solid gray;
 }
 
 .progress {
