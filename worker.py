@@ -18,6 +18,7 @@ import importlib
 import json
 import os
 import textwrap
+import traceback
 import sys
 
 import polyscript
@@ -37,12 +38,12 @@ def text(x, y, txt, size=14, font="Courier", color="black"):
     viz.append(f"text({x}, {y}, {repr(txt)}, {size}, {repr(font)}, {repr(color)})")
 
 
-def rect(x, y, w, h, color):
+def rect(x, y, w, h, fill="white", border="gray"):
     """ Draw a rectangle """
-    viz.append(f"rect({x}, {y}, {w}, {h}, {repr(color)})")
+    viz.append(f"rect({x}, {y}, {w}, {h}, {repr(fill)}, {repr(border)})")
 
 
-def barchart(x, y, w, h, data, highlight, scale=1):
+def barchart(x, y, w, h, data, highlight=None, scale=1):
     """ Draw a barchart """
     viz.append(f"barchart({x}, {y}, {w}, {h}, {repr(data)}, {highlight}, {scale})")
 
@@ -102,6 +103,7 @@ def handle_request(sender, topic, request):
                 if filename != "<string>":
                     return step
                 state.update(frame.f_locals)
+                state["__lineno__"] = lineno
                 try:
                     exec(visualization, state, state)
                 except Exception as e:
@@ -113,6 +115,7 @@ def handle_request(sender, topic, request):
             exec(script, state, state)
             response = "visualize"
         except Exception as e:
+            traceback.print_exc()
             result = str(e)
             response = "error"
     elif topic == "load":

@@ -1,6 +1,7 @@
 
 let context = null;
 let canvas = null;
+let None = null;
 
 function init() {
     /* Initializes the drawing canvas */

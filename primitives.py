@@ -16,9 +16,9 @@ def text(x, y, txt, size=14, font="Courier", color="black"):
     """ Draw a text """
 
 
-def rect(x, y, w, h, color):
+def rect(x, y, w, h, fill="white", border="gray"):
     """ Draw a rectangle """
 
 
-def barchart(x, y, w, h, data, highlight, scale=1):
+def barchart(x, y, w, h, data, highlight=None, scale=1):
     """ Draw a barchart """

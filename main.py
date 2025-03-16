@@ -225,6 +225,7 @@ def setup_worker():
         "files": {
             "primitives.py": "primitives.py",
             "visualizations/bubblesort.py": "visualizations/bubblesort.py",
+            "visualizations/mergesort.py": "visualizations/mergesort.py",
         }
     }
     worker = XWorker("worker.py", config=ltk.to_js(config), type="pyodide")
