@@ -53,6 +53,7 @@ progress.on("slide", ltk.proxy(lambda *args: progress.trigger("change")))
 @ltk.callback
 def run(_event=None):
     """ Run the current algorithm """
+    print("run")
     ltk.publish(
         "Main",
         "Worker",
@@ -145,6 +146,7 @@ def load_source(sources):
     algo, viz = sources
     editor_algo.set(algo)
     editor_viz.set(viz)
+    run()
 
 
 def save_choices(choices):
@@ -199,11 +201,21 @@ def setup_ui():
     )
 
 
+def worker_ready(request):
+    """ Worker is ready """
+    ltk.publish(
+        "Main",
+        "Worker",
+        "load",
+        ltk.get_url_parameter("name")
+    )
+
+
 def setup_worker():
     """ Setup the worker """
     ltk.subscribe("Main", "visualize", visualize)
     ltk.subscribe("Main", "error", show_error)
-    ltk.subscribe("Main", "ready", run)
+    ltk.subscribe("Main", "ready", worker_ready)
     ltk.subscribe("Main", "source", load_source)
     ltk.subscribe("Main", "choices", save_choices)
     config = {
@@ -213,13 +225,6 @@ def setup_worker():
         "files": {
             "visualizations/__init__.py": "visualizations/__init__.py",
             "visualizations/bubblesort.py": "visualizations/bubblesort.py",
-            "https://raw.githubusercontent.com/pyscript/ltk/main/ltk/jquery.py": "ltk/jquery.py",
-            "https://raw.githubusercontent.com/pyscript/ltk/main/ltk/widgets.py": "ltk/widgets.py",
-            "https://raw.githubusercontent.com/pyscript/ltk/main/ltk/pubsub.py": "ltk/pubsub.py",
-            "https://raw.githubusercontent.com/pyscript/ltk/main/ltk/__init__.py": "ltk/__init__.py",
-            "https://raw.githubusercontent.com/pyscript/ltk/main/ltk/logger.py": "ltk/logger.py",
-            "https://raw.githubusercontent.com/pyscript/ltk/main/ltk/ltk.js": "ltk/ltk.js",
-            "https://raw.githubusercontent.com/pyscript/ltk/main/ltk/ltk.css": "ltk/ltk.css",
         }
     }
     worker = XWorker("worker.py", config=ltk.to_js(config), type="pyodide")

@@ -20,7 +20,6 @@ import sys
 
 import polyscript
 
-import ltk
 import visualizations
 
 viz = []
@@ -51,26 +50,20 @@ def getsource(function):
     return textwrap.dedent("\n".join(lines[1:]))
 
 
-def get_url_parameter(key):
-    """ Returns the current document's URL parameter. """
-    search = ltk.window.location.search
-    return ltk.window.URLSearchParams.new(search).get(key)
+def load_algorithm(name):
+    """ Loads the algorithm. """
+    module = getattr(visualizations, name)
+    return [
+        "source",
+        [
+            getsource(module.algorithm),
+            getsource(module.visualization),
+        ]
+    ]
 
 
-def load_algorithm():
-    """ Loads the algorithm from the URL parameter. """
-    name = get_url_parameter("name")
-    if name:
-        module = getattr(visualizations, name)
-        polyscript.xworker.sync.publish(
-            "Worker",
-            "Main",
-            "source",
-            [
-                getsource(module.algorithm),
-                getsource(module.visualization),
-            ]
-        )
+def load_choices():
+    """ Loads the algorithm choices. """
     polyscript.xworker.sync.publish(
         "Worker",
         "Main",
@@ -89,7 +82,6 @@ def handle_request(sender, topic, request):
     """
     if topic == "run":
         script, visualization = json.loads(request)
-        print("Worker run")
         try:
             result = []
             state = {
@@ -120,6 +112,8 @@ def handle_request(sender, topic, request):
         except Exception as e:
             result = str(e)
             response = "error"
+    elif topic == "load":
+        response, result = load_algorithm(json.loads(request))
     else:
         result = f"Unknown topic: {topic}"
         response = "error"
@@ -133,8 +127,9 @@ def handle_request(sender, topic, request):
 
 polyscript.xworker.sync.handler = handle_request
 polyscript.xworker.sync.subscribe("Worker", "run", "pyodide-worker")
+polyscript.xworker.sync.subscribe("Worker", "load", "pyodide-worker")
 
-load_algorithm()
+load_choices()
 
 polyscript.xworker.sync.publish(
     "Worker",
