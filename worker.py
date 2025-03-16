@@ -14,12 +14,15 @@ code, find dependencies, and perform code completion.
 # pylint: disable=too-many-positional-arguments
 
 import inspect
+import importlib
 import json
+import os
 import textwrap
 import sys
 
 import polyscript
 
+import primitives
 import visualizations
 
 viz = []
@@ -52,7 +55,7 @@ def getsource(function):
 
 def load_algorithm(name):
     """ Loads the algorithm. """
-    module = getattr(visualizations, name)
+    module = importlib.import_module(f"visualizations.{name}")
     return [
         "source",
         [
@@ -61,18 +64,18 @@ def load_algorithm(name):
         ]
     ]
 
-
 def load_choices():
     """ Loads the algorithm choices. """
+    choices = [
+        os.path.splitext(f)[0]
+        for f in os.listdir("/home/pyodide/visualizations/")
+        if f.endswith('.py') and not f.startswith('__')
+    ]
     polyscript.xworker.sync.publish(
         "Worker",
         "Main",
         "choices",
-        [
-            key
-            for key, value in visualizations.__dict__.items()
-            if inspect.ismodule(value)
-        ]
+        choices,
     )
 
 

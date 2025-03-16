@@ -22,5 +22,3 @@ def rect(x, y, w, h, color):
 
 def barchart(x, y, w, h, data, highlight, scale=1):
     """ Draw a barchart """
-
-from . import bubblesort

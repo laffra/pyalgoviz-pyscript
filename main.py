@@ -223,7 +223,7 @@ def setup_worker():
         "packages": [ 
         ],
         "files": {
-            "visualizations/__init__.py": "visualizations/__init__.py",
+            "primitives.py": "primitives.py",
             "visualizations/bubblesort.py": "visualizations/bubblesort.py",
         }
     }

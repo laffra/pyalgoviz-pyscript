@@ -8,7 +8,7 @@ Bubble Sort visualization
 #pylint: disable=unused-import
 #pylint: disable=invalid-name
 
-from . import barchart, text, line, rect
+from primitives import barchart, text, line, rect
 
 NAME = "Bubble Sort"
 AUTHOR = "Chris Laffra"
