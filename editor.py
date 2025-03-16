@@ -28,7 +28,8 @@ class Editor(ltk.Div):
         self.editor = None
         self.marker = None
         self.code_completor = None
-        ltk.schedule(lambda: self.set(value), f"set value {id(self)}")
+        self.value = value
+        ltk.schedule(lambda: self.set(self.value), f"set value {id(self)}")
         ltk.schedule(self.refresh, f"force editor redraw {id(self)}")
 
     def create_editor(self):
@@ -70,6 +71,8 @@ class Editor(ltk.Div):
         Args:
             value (str): The new value to set for the editor.
         """
+        print("set editor", value)
+        self.value = value
         if self.editor and self.editor.hasFocus():
             return self
         self.create_editor()

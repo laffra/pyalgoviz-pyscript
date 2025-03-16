@@ -13,27 +13,10 @@ Copyright (c) 2024 laffra - All Rights Reserved.
 
 from polyscript import XWorker # type: ignore   pylint: disable=import-error
 import ltk
-from editor import Editor
+import editor
 
-
-ALGORITHM = """
-from random import sample
-
-def bubbleSort(L):
-    for i in range(len(L)-1, 0, -1): 
-        for j in range(i):
-            if L[j]>L[j+1]:
-                L[j],L[j+1] = L[j+1],L[j]
-            
-data = sample(range(30), 30)
-bubbleSort(data)
-""".strip()
-
-VISUALIZATION = """
-barchart(50, 60, 460, 150, data, highlight=i, scale=4)
-text(50, 35, "Bubble Sort", 15, color="green")
-""".strip()
-
+ALGORITHM = "# Your algorithm goes here."
+VISUALIZATION = "# Your visualization logic goes here."
 
 class State(ltk.Model):
     """ The state for the algorithm visualization """
@@ -58,8 +41,8 @@ class State(ltk.Model):
 
 
 state = State()
-editor_algo = Editor(ALGORITHM)
-editor_viz = Editor(VISUALIZATION)
+editor_algo = editor.Editor(ALGORITHM)
+editor_viz = editor.Editor(VISUALIZATION)
 auto_run = ltk.Switch("auto-run", state.auto_run)
 progress = ltk.Slider(state.step, 0, 0)
 
@@ -141,55 +124,92 @@ def next_step(_event=None):
     state.step = min(len(state.steps.value) - 1, state.step + 1)
 
 
-ltk.subscribe("Main", "visualize", visualize)
-ltk.subscribe("Main", "error", show_error)
-ltk.subscribe("Main", "ready", run)
+def load_source(sources):
+    """ Load the algorithm and visualization """
+    algo, viz = sources
+    editor_algo.set(algo)
+    editor_viz.set(viz)
 
-ltk.find("body").append(
-    ltk.HorizontalSplitPane(
-        ltk.VerticalSplitPane(
-            ltk.VBox(
-                editor_algo,
-                ltk.HBox(
-                    ltk.Button("run", run),
-                    auto_run,
-                    ltk.Select(["Slow", "Medium", "Fast"], state.speed_human)
-                        .addClass("speed"),
-                    ltk.Button("prev", previous_step),
-                    ltk.Label("Step:"),
-                    ltk.Label(state.step).addClass("step-label"),
-                    progress.addClass("progress"),
-                    ltk.Button("next", next_step),
-                ).addClass("controls"),
-            ),
-            editor_viz,
-            "editors",
-        ).addClass("column"),
-        ltk.VerticalSplitPane(
-            ltk.Div()
-                .addClass("drawing"),
-            ltk.Tabs(
+
+def setup_ui():
+    """ Create the UI """
+    ltk.find("body").append(
+        ltk.HorizontalSplitPane(
+            ltk.VerticalSplitPane(
+                ltk.VBox(
+                    editor_algo,
+                    ltk.HBox(
+                        ltk.Button("run", run),
+                        auto_run,
+                        ltk.Select(["Slow", "Medium", "Fast"], state.speed_human)
+                            .addClass("speed"),
+                        ltk.Button("prev", previous_step),
+                        ltk.Label("Step:"),
+                        ltk.Label(state.step).addClass("step-label"),
+                        progress.addClass("progress"),
+                        ltk.Button("next", next_step),
+                    ).addClass("controls"),
+                ),
+                editor_viz,
+                "editors",
+            ).addClass("column"),
+            ltk.VerticalSplitPane(
                 ltk.Div()
-                .addClass("log-algo")
-                .attr("name", "Algorithm Log"),
-                ltk.Div()
-                .addClass("log-viz")
-                .attr("name", "Visualization Log"),
-            ).addClass("log"),
-            "result",
-        ).addClass("column"),
-        "main",
+                    .addClass("drawing"),
+                ltk.Tabs(
+                    ltk.Div()
+                    .addClass("log-algo")
+                    .attr("name", "Algorithm Log"),
+                    ltk.Div()
+                    .addClass("log-viz")
+                    .attr("name", "Visualization Log"),
+                ).addClass("log"),
+                "result",
+            ).addClass("column"),
+            "main",
+        )
+        .addClass("main")
     )
-    .addClass("main")
-)
 
-ltk.window.init()
-config = {
-    "interpreter": "pyodide/pyodide.js",
-    "packages": [ 
-    ],
-    "files": {
+
+def setup_worker():
+    """ Setup the worker """
+    ltk.subscribe("Main", "visualize", visualize)
+    ltk.subscribe("Main", "error", show_error)
+    ltk.subscribe("Main", "ready", run)
+    ltk.subscribe("Main", "source", load_source)
+    config = {
+        "interpreter": "pyodide/pyodide.js",
+        "packages": [ 
+        ],
+        "files": {
+            "visualizations/__init__.py": "visualizations/__init__.py",
+            "visualizations/bubblesort.py": "visualizations/bubblesort.py",
+            "https://raw.githubusercontent.com/pyscript/ltk/main/ltk/jquery.py": "ltk/jquery.py",
+            "https://raw.githubusercontent.com/pyscript/ltk/main/ltk/widgets.py": "ltk/widgets.py",
+            "https://raw.githubusercontent.com/pyscript/ltk/main/ltk/pubsub.py": "ltk/pubsub.py",
+            "https://raw.githubusercontent.com/pyscript/ltk/main/ltk/__init__.py": "ltk/__init__.py",
+            "https://raw.githubusercontent.com/pyscript/ltk/main/ltk/logger.py": "ltk/logger.py",
+            "https://raw.githubusercontent.com/pyscript/ltk/main/ltk/ltk.js": "ltk/ltk.js",
+            "https://raw.githubusercontent.com/pyscript/ltk/main/ltk/ltk.css": "ltk/ltk.css",
+        }
     }
-}
-worker = XWorker("worker.py", config=ltk.to_js(config), type="pyodide")
-ltk.register_worker("pyodide-worker", worker)
+    worker = XWorker("worker.py", config=ltk.to_js(config), type="pyodide")
+    ltk.register_worker("pyodide-worker", worker)
+
+
+def show_loading():
+    """ Show the loading screen """
+    if "name=" in ltk.window.location.href:
+        editor_algo.set("Loading...")
+        editor_viz.set("Loading...")
+
+
+def setup():
+    """ Setup the application """
+    setup_ui()
+    setup_worker()
+    show_loading()
+    ltk.window.init()
+
+setup()

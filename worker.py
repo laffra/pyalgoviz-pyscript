@@ -13,10 +13,15 @@ code, find dependencies, and perform code completion.
 # pylint: disable=too-many-arguments
 # pylint: disable=too-many-positional-arguments
 
+import inspect
 import json
+import textwrap
 import sys
 
 import polyscript
+
+import ltk
+import visualizations
 
 viz = []
 
@@ -39,6 +44,33 @@ def barchart(x, y, w, h, data, highlight, scale=1):
     """ Draw a barchart """
     viz.append(f"barchart({x}, {y}, {w}, {h}, {repr(data)}, {highlight}, {scale})")
 
+
+def getsource(function):
+    """ Returns the source code of a function. """
+    lines = inspect.getsource(function).split("\n")
+    return textwrap.dedent("\n".join(lines[1:]))
+
+
+def get_url_parameter(key):
+    """ Returns the current document's URL parameter. """
+    search = ltk.window.location.search
+    return ltk.window.URLSearchParams.new(search).get(key)
+
+
+def load_algorithm():
+    """ Loads the algorithm from the URL parameter. """
+    name = get_url_parameter("name")
+    if name:
+        module = getattr(visualizations, name)
+        polyscript.xworker.sync.publish(
+            "Worker",
+            "Main",
+            "source",
+            [
+                getsource(module.algorithm),
+                getsource(module.visualization),
+            ]
+        )
 
 
 def handle_request(sender, topic, request):
@@ -91,6 +123,9 @@ def handle_request(sender, topic, request):
 
 polyscript.xworker.sync.handler = handle_request
 polyscript.xworker.sync.subscribe("Worker", "run", "pyodide-worker")
+
+load_algorithm()
+
 polyscript.xworker.sync.publish(
     "Worker",
     "Main",
