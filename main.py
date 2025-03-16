@@ -136,7 +136,7 @@ def load(_event=None):
         ltk.window.location = f"?name={button.text()}"
 
     ltk.Div([
-        ltk.Button(name, load_algo)
+        ltk.Button(name, load_algo).addClass("choice-button")
         for name in state.choices
     ]).attr("title", "Load...").dialog()
 

@@ -26,3 +26,7 @@
 .editor_line {
     background-color: rgb(207, 214, 217)
 }
+
+.choice-button {
+    margin-right: 8px;
+}
