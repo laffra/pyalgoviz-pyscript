@@ -24,9 +24,9 @@ using publish/subscribe message, very similar to Kafka.
 
 # Using PyOdide in a worker 
 
-The PyOdide worker is created by the main thread. It gets passed a couple 
+The main thread creates the PyOdide worker. It receives a couple 
 of Python modules needed to run the algorithms and visualize them.
-When the algorithm is executed, in the worker, the following happens:
+When the algorithm is executed in the worker, the following happens:
 
 - First, the worker installs a `sys.settrace` function
 - Then, it runs the algorithm using `exec`.
@@ -35,26 +35,28 @@ When the algorithm is executed, in the worker, the following happens:
     - Otherwise, we run the visualization code. 
     - The resulting visualization is saved.
 
-The end result is that we produce an image for each line that is executed.
-When these frames are played back in sequence, we get a visualization of
+The result is that we produce an image for each executed line.
+When these frames are played back in sequence, we visualize
 the algorithm. At the end of the run, the visualization is sent
-back to the main thread, using the publish/subscribe mechanism.
+back to the main thread using the publish/subscribe mechanism.
 
 # Rendering the visualization
 
-The main thread receives the visualization and renders it. It basically
-shows a movie, where each frame is keyed to a line of code. When it 
-renders a specific frame, the control section is updated to show 
-progress. In addition, the current line in the source code editor 
-is highlighted. For performance reasons, the visualization of a 
-specific frame is not rendered in Python, but in JavaScript.
+The main thread receives the visualization and renders it. It 
+shows a movie where each frame is keyed to a line of code. The control section is updated to show
+progress when it renders a specific frame. In addition, the current line in the source code editor 
+is highlighted. For performance reasons, the visualization of a frame is not rendered in 
+Python but in JavaScript. This is 
+due to the overhead FFI calls have between Python and JavaScript.
+This makes numerous DOM access calls expensive unless they are 
+bundled into one.
 
 # Contributing a new visualization
 
 Visualizations are written in Python. They are saved in the `visualizations`
 folder. Each visualization is a Python module that exports two functions.
 The script can be written in PyAlgoViz and then copied to a local file,
-to add it to the PyAlgoViz reepository on GitHub. We welcome PRs with
+to add it to the PyAlgoViz repository on GitHub. We welcome PRs with
 new visualizations.
 
 To get started, see the existing visualizations such as 
