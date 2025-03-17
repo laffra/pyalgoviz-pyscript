@@ -4,7 +4,7 @@ This is the PyScript version of [PyAlgoViz](https://github.com/laffra/pyalgoviz)
 
 ![bubblesort.gif](bubblesort.gif)
 
-A live preview is hosted at [Github Pages](https://laffra.github.io/pyalgoviz-pyscript?name=bubblesort).
+A live preview is hosted at [Github Pages](https://laffra.github.io/pyalgoviz-pyscript/?name=numbers_fibonacci___golden_ratio).
 
 
 # Using MicroPython for fast startup
