@@ -19,39 +19,39 @@ function clear() {
     context.fillRect(0, 0, canvas.width(), canvas.height());
 }
 
-function number(x, y, label, value, scale=4, color='black') {
+function n(x, y, label, value, scale=4, color='black') {
     /* Draw a number */
     text(x, y+10, label);
     rect(x+20, y, value*scale, 10, color);
     text(x+22+value*scale, y+10, value);
 }
 
-function barchart(x, y, w, h, items, highlight=-1, scale=1, fill='black', border='black') {
+function b(x, y, w, h, items, highlight=-1, fill="black", scale=1) {
     /* Draw a barchart */
-    rect(x, y, w, h, '#FDFDF0', border);
+    rect(x, y, w, h, '#FDFDF0', "gray");
     if (items) {
         let d = Math.min(15, Math.floor(w/items.length));
         let offset = (w - items.length*d)/2;
         items.forEach((item, n) => {
             let hitem = item*scale;
-            rect(offset+x+n*d, y+h-hitem, d-2, hitem, n===highlight ? 'red' : fill);
+            rect(offset+x+n*d, y+h-hitem, d-2, hitem, n===highlight ? 'red' : fill, "lightgray");
         });
     }
 }
 
-function text(x, y, txt, size=13, font='Arial', color='black') {
+function t(x, y, txt, size=13, font='Arial', color='black') {
     /* Draw a text */
     context.fillStyle = color
     context.font = `${size}px ${font}`
     context.fillText(txt, x, y)
 }
 
-function error(msg) {
+function e(msg) {
     /* Draw an error message */
-    text(20, 20, msg, 20, 'Arial', 'red')
+    text(20, 20, msg, 14, 'Arial', 'red')
 }
 
-function line(x1, y1, x2, y2, color='black', width=1) {
+function l(x1, y1, x2, y2, color='black', width=1) {
     /* Draw a line */
     context.strokeStyle = color
     context.lineWidth = width
@@ -61,7 +61,7 @@ function line(x1, y1, x2, y2, color='black', width=1) {
     context.stroke()
 }
 
-function rect(x, y, w, h, fill='white', border='black') {
+function r(x, y, w, h, fill='white', border='black') {
     /* Draw a rectangle */
     context.strokeStyle = border
     context.strokeRect(x, y, w, h)
@@ -69,22 +69,54 @@ function rect(x, y, w, h, fill='white', border='black') {
     context.fillRect(x, y, w, h)
 }
 
-function circle(x, y, radius, fill='white', border='black') {
+function c(x, y, radius, fill='white', border='black') {
     /* Draw a circle */
-    context.strokeStyle = border
     context.beginPath()
     context.arc(x, y, radius, 0, 2 * Math.PI)
-    context.stroke()
-    context.fillStyle = border
+    context.fillStyle = fill
     context.fill()
+    context.strokeStyle = border
+    context.stroke()
 }
 
-function arc(cx, cy, innerRadius, outerRadius, startAngle, endAngle, color='black') {
-    /* Draw an arc */
+function a(x, y, radius, startAngle, endAngle, border='black') {
+    context.beginPath()
+    context.arc(x, y, radius, startAngle, endAngle)
+    context.strokeStyle = border
+    context.stroke()
 }
 
-function render(items) {
-    for (let item of items) {
-        eval(item)
-    }
+const audioContext = new (window.AudioContext || window.webkitAudioContext)()
+
+function s(frequency=440, duration=10) {
+    const oscillator = audioContext.createOscillator()
+    const gain = audioContext.createGain()
+    const stop = audioContext.currentTime + duration/1000
+
+    gain.connect(audioContext.destination)
+    oscillator.connect(audioContext.destination)
+
+    gain.gain.setValueAtTime(0.01, audioContext.currentTime);
+    oscillator.type = 'sin'
+    oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime)
+    gain.gain.setTargetAtTime(0, stop - 0.01, 0.01);
+    gain.gain.linearRampToValueAtTime(0, stop);
+    // oscillator.start()
+    setTimeout(() => {
+        oscillator.stop()
+    }, duration)
+}
+
+barchart = b;
+text = t;
+circle = c;
+arc = a;
+beep = s;
+error = e;
+rect = r;
+line = l;
+number = n;
+
+function render(operations) {
+    eval(operations)
 }

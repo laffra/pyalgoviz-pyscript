@@ -11,14 +11,17 @@ Drawing primitives that can be used to visualize data.
 def line(x1, y1, x2, y2, color, w):
     """ Draw a line """
 
-
-def text(x, y, txt, size=14, font="Courier", color="black"):
+def text(x, y, txt, size=12, font="Arial", color="black"):
     """ Draw a text """
-
 
 def rect(x, y, w, h, fill="white", border="gray"):
     """ Draw a rectangle """
 
+def circle(x, y, radius, fill="white", border="gray"):
+    """ Draw a circle """
 
-def barchart(x, y, w, h, data, highlight=None, scale=1):
+def arc(x, y, radius, start_angle, end_angle, color='black'):
+    """ Draw an arc """
+
+def barchart(x, y, w, h, data, highlight=None, fill="black", scale=1):
     """ Draw a barchart """

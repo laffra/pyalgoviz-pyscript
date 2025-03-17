@@ -1,6 +1,7 @@
 [files]
 
 "editor.py" = "editor.py"
+"worker_files.py" = "worker_files.py"
 
 "https://raw.githubusercontent.com/pyscript/ltk/main/ltk/jquery.py" = "ltk/jquery.py"
 "https://raw.githubusercontent.com/pyscript/ltk/main/ltk/widgets.py" = "ltk/widgets.py"
