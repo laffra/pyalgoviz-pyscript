@@ -1,8 +1,11 @@
 # PyAlgoViz
 
-A live preview is hosted at [Github Pages](https://laffra.github.io/pyalgoviz-pyscript?name=bubblesort)
+This is the PyScript version of [PyAlgoViz](https://github.com/laffra/pyalgoviz).
 
-This is the PyScript version of [PyAlgoViz](https://github.com/laffra/pyalgoviz)
+![bubblesort.gif](bubblesort.gif)
+
+A live preview is hosted at [Github Pages](https://laffra.github.io/pyalgoviz-pyscript?name=bubblesort).
+
 
 # Using MicroPython for fast startup
 
