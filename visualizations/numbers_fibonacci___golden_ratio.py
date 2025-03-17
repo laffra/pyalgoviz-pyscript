@@ -55,7 +55,7 @@ def __visualization():
         if w[k]>5:
             rect(x, y, w[k], w[k], border='#CCC')
             text(x+1, y+9, numbers[k], 10, 'Arial', '#CCC')
-            arc(ax, ay, w[k]-3, w[k], angle, angle+pi/1.95, 'red')
+            arc(ax, ay, w[k], angle-pi/1.95, angle, 'red')
         angle -= pi/2
         dir = A[(dir+1)%4]
     
