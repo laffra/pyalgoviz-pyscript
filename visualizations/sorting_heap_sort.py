@@ -44,7 +44,7 @@ def __visualization():
             start, count = 2**level-1, 2**level
             for n in range(start, start+count):
                 x = 20 + (n-start+1) * 500/(count+1)
-                p = prev_start + (n-start)/2
+                p = prev_start + (n-start) // 2
                 px = 20 + (p-prev_start+1) * 500/(prev_count+1)
                 color = 'salmon' if heap[n] == value else 'lightblue' 
                 if level > 0: line(x, y, px, y-32, 'orange')
