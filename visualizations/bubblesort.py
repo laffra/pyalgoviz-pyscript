@@ -38,15 +38,15 @@ def algorithm():
 
 
 def visualization():
-    barchart(50, 120, 620, 150, data, highlight=i, scale=4)
+    barchart(50, 120, 600, 150, data, highlight=i, scale=4)
 
     def show(name, index, y, color):
-        x = 53+index*460/len(data)
+        x = 132 + index * 15
         line(x, y, x, 270, color, 2)
         text(x+3, y+3, f'{name} = {index}', 20)
 
     show('i', i, 350, 'red')
     show('j', j, 390, 'blue')
 
-    rect(50, 30, 620, 40, '#333')
+    rect(50, 30, 600, 40, '#333')
     text(250, 60, 'Bubble Sort', 30, color='lightblue')
