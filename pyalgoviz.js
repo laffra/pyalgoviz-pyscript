@@ -6,9 +6,10 @@ let None = null;
 function init() {
     /* Initializes the drawing canvas */
     let div = $(".drawing").empty();
+    let parent = div.parent();
     canvas = $("<canvas>")
-        .attr("width", parseInt(div.width()))
-        .attr("height", parseInt(div.height()))
+        .attr("width", parseInt(parent.width()))
+        .attr("height", parseInt(parent.height()))
         .appendTo(div);
     context = canvas[0].getContext("2d");
 }

@@ -91,3 +91,13 @@
     width: fit-content;
     float: left;
 }
+
+.top-right {
+    position: relative;
+}
+
+.related {
+    position: absolute;
+    bottom: 0px;
+    padding: 8px
+}

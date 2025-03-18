@@ -21,6 +21,7 @@ import importlib
 import json
 import math
 import os
+import random
 import textwrap
 import traceback
 import types
@@ -104,6 +105,15 @@ def load_algorithm(name):
         visualization = getsource(mod.body[4], lines)
         return [ name, author, algorithm, visualization ]
 
+
+def load_related(name):
+    """ Loads the algorithm. """
+    category = name.split("/")[0]
+    dirname = os.path.dirname(f"visualizations/{name}.py")
+    names = [f"{category}/{name.replace(".py", "")}" for name in os.listdir(dirname)]
+    return random.sample(names, 5)
+
+
 def load_choices():
     """ Loads the algorithm choices. """
     choices = {
@@ -183,7 +193,9 @@ def handle_request(sender, topic, request):
             publish("error", [error_lineno, str(e)])
     elif topic == "load":
         try:
-            publish("source", load_algorithm(json.loads(request)))
+            name = json.loads(request)
+            publish("source", load_algorithm(name))
+            publish("related", load_related(name))
         except Exception:
             tip = "Press the <b>Load...</b> button to try any of the built-in algorithms."
             msg = f"Cannot load {request}<p>{tip}"

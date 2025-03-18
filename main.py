@@ -118,21 +118,23 @@ def visit(category, name):
     """ Switch to another algorithm """
     ltk.window.location = f"?name={category}/{name}"
 
+
+@ltk.callback
+def load_algo(event):
+    """ Load an algorithm """
+    button = ltk.find(event.target)
+    category = button.attr("category")
+    ltk.find(".ui-dialog").remove()
+    ltk.find("body").animate(
+        {
+            "opacity": 0
+        },
+        lambda: visit(category, button.text())
+    )
+
+
 def load(_event=None):
     """ Load an existing algorithm """
-
-    @ltk.callback
-    def load_algo(event):
-        button = ltk.find(event.target)
-        category = button.attr("category")
-        ltk.find(".ui-dialog").remove()
-        ltk.find("body").animate(
-            {
-                "opacity": 0
-            },
-            lambda: visit(category, button.text())
-        )
-
     ltk.Div([
         ltk.VBox(ltk.Heading3(category), [
             ltk.Button(choice, load_algo)
@@ -159,6 +161,23 @@ def load_source(sources):
     )
     run()
 
+
+def show_related(names):
+    """ Show the related scripts the user can choose from """
+    ltk.find(".related").empty().append(
+        ltk.HBox(
+            ltk.Label("Related Scripts:"),
+            [
+                ltk.Button(name, load_algo)
+                    .attr("category", category)
+                    .addClass("choice-button")
+                for category, name in [entry.split("/") for entry in names]
+            ],
+            ltk.Button("Choose Any...", load)
+        ).element
+    )
+    print("show_related", [name for name in names])
+    
 
 def save_choices(choices):
     """ Save the algorithms the user can choose from """
@@ -190,16 +209,21 @@ def setup_ui():
                 "editors",
             ).addClass("column"),
             ltk.VerticalSplitPane(
-                ltk.Div()
-                    .addClass("drawing"),
-                ltk.Tabs(
+                ltk.Div(
                     ltk.Div()
-                        .addClass("log-algo")
-                        .attr("name", "Algorithm Log"),
-                    ltk.Div()
-                        .addClass("log-viz")
-                        .attr("name", "Visualization Log"),
-                ).addClass("log"),
+                        .addClass("drawing"),
+                    ltk.Div().addClass("related"),
+                ).addClass("top-right"),
+                ltk.Div(
+                    ltk.Tabs(
+                        ltk.Div()
+                            .addClass("log-algo")
+                            .attr("name", "Algorithm Log"),
+                        ltk.Div()
+                            .addClass("log-viz")
+                            .attr("name", "Visualization Log"),
+                    ).addClass("log"),
+                ),
                 "result",
             ).addClass("column"),
             "main",
@@ -226,6 +250,7 @@ def setup_worker():
     ltk.subscribe("Main", "ready", worker_ready)
     ltk.subscribe("Main", "source", load_source)
     ltk.subscribe("Main", "choices", save_choices)
+    ltk.subscribe("Main", "related", show_related)
     files = worker_files.files
     files["primitives.py"] = "primitives.py"
     config = {
