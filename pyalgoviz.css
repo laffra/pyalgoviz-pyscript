@@ -32,7 +32,7 @@
     min-width: 20px;
 }
 
-.editor {
+.editor, .log-viz, .log-algo {
     overflow: hidden;
     overflow-y: scroll;
 }
@@ -50,7 +50,7 @@
     height: 100%;
 }
 
-.error {
+.error, .log-error {
     display: block;
     color: red;
     font-size: 13px;
@@ -64,4 +64,16 @@
 
 .ui-dialog {
     z-index: 10000;
+}
+
+.name {
+    font-weight: bold;
+}
+
+.author {
+    margin-bottom: 16px;
+}
+
+.ui-tabs .ui-tabs-panel {
+    padding: 0 8px;
 }

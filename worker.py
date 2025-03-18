@@ -29,6 +29,9 @@ import polyscript
 
 
 viz = []
+log = []
+lineno = 0
+
 
 def line(x1, y1, x2, y2, color="black", width=1):
     """ Draw a line """
@@ -55,6 +58,20 @@ def rect(x, y, w, h, fill="white", border="gray"):
     viz.append(f"r({x},{y},{w},{h},{repr(fill)},{repr(border)})")
 
 
+def viz_print(*args):
+    """ The visualization script prints something """
+    viz.append(f"p(\"{' '.join(map(str, args))}\")")
+
+orig_print = print
+
+def algo_print(*args):
+    """ The algorithm script prints something """
+    msg = " ".join(map(str, args))
+    line_msg = f"Line {lineno}: {msg}"
+    log.append(line_msg)
+    orig_print(line_msg)
+
+
 def barchart(x, y, w, h, data, highlight=None, fill="black", scale=1):
     """ Draw a barchart """
     assert isinstance(data, list), f"Expected a list of numbers, not {type(data)}"
@@ -66,22 +83,22 @@ def beep(frequency=440, duration=10):
     viz.append(f"s({frequency},{duration})")
 
 
-def getsource(function):
+def getsource(func):
     """ Returns the source code of a function. """
-    lines = inspect.getsource(function).split("\n")
+    lines = inspect.getsource(func).split("\n")
     return textwrap.dedent("\n".join(lines[1:]))
 
 
 def load_algorithm(name):
     """ Loads the algorithm. """
-    module = importlib.import_module(f"visualizations.{name}")
+    mod = importlib.import_module(f"visualizations.{name}")
     return [
         "source",
         [
-            module.__name,       # pylint: disable=protected-access
-            module.__author,       # pylint: disable=protected-access
-            getsource(module.__algorithm),       # pylint: disable=protected-access
-            getsource(module.__visualization),   # pylint: disable=protected-access
+            mod.__name,       # pylint: disable=protected-access
+            mod.__author,       # pylint: disable=protected-access
+            getsource(mod.__algorithm),       # pylint: disable=protected-access
+            getsource(mod.__visualization),   # pylint: disable=protected-access
         ]
     ]
 
@@ -104,11 +121,15 @@ def handle_request(sender, topic, request):
     """
     Handles requests received by the worker process.
     """
+    global log
     if topic == "run":
         script, visualization = json.loads(request)
         try:
             start = time.time()
-            result = []
+            result = {
+                "viz": [],
+                "log": [],
+            }
             state = globals()
             state.update({
                 "line": line,
@@ -118,39 +139,45 @@ def handle_request(sender, topic, request):
                 "circle": circle,
                 "arc": arc,
                 "beep": beep,
+                "print": algo_print,
             })
 
             def step(frame, event, arg):
-                global viz
+                global viz, lineno
                 viz = []
-                lineno = frame.f_lineno
                 filename = frame.f_code.co_filename
                 if filename != "<string>":
                     return step
+                lineno = frame.f_lineno
                 if time.time() - start > 10:
                     raise TimeoutError("Ran more than 10 seconds")
                 state.update(frame.f_locals)
                 state.update(globals())
                 state["__lineno__"] = lineno
                 try:
+                    state["print"] = viz_print
                     exec(visualization, state, state)
                 except Exception as e:
                     tb = traceback.extract_tb(sys.exc_info()[2])
                     error_lineno = tb[-1].lineno
                     viz.append(f"error(\"Visualization error at line {error_lineno}: {e}\")")
-                    traceback.print_exc()
-                result.append([ lineno, "\n".join(viz) ])
+                finally:
+                    state["print"] = algo_print
+                result["viz"].append([ lineno, "\n".join(viz) ])
                 return step
 
-            sys.settrace(step)
-            exec(script, state, state)
+            log = []
+            try:
+                sys.settrace(step)
+                exec(script, state, state)
+            finally:
+                sys.settrace(None)
+            result["log"] = log[::]
             response = "visualize"
         except Exception as e:
-            traceback.print_exc()
             tb = traceback.extract_tb(sys.exc_info()[2])
             error_lineno = tb[-1].lineno
             result = [error_lineno, str(e)]
-            print("Error", error_lineno, e, list(state.keys()))
             response = "error"
     elif topic == "load":
         response, result = load_algorithm(json.loads(request))

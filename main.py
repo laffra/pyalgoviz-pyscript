@@ -109,12 +109,20 @@ def show(step=-1):
 
 def visualize(data):
     """ Visualize the current algorithm """
-    state.steps = data
-    state.step_count = len(data)
+    state.steps = data["viz"]
+    state.step_count = len(data["viz"])
     progress.element.slider("option", "max", str(state.step_count))
     ltk.window.init()
     ltk.window.text(15, 125, "Loading...", 20, "Arial", "green")
     ltk.schedule(lambda: show(0), "show step 0", 0)
+    ltk.find(".log-algo .log-line").empty()
+    print("vis", data["log"])
+    for line in data["log"]:
+        ltk.find(".log-algo").append(
+            ltk.Div(line)
+                .addClass("log-line")
+        )
+
 
 
 def show_error(data):
@@ -122,7 +130,7 @@ def show_error(data):
     lineno, error = data
     ltk.find(".log-algo").append(
         ltk.Div(f"Error at line {lineno}: {error}")
-            .addClass("error")
+            .addClass("log-line log-error")
     )
     editor_algo.mark_line(lineno - 1)
 
@@ -159,8 +167,10 @@ def load_source(sources):
     editor_algo.set(algo)
     editor_viz.set(viz)
     ltk.find(".log-algo").append(
-        ltk.Heading1(name.replace("_", " ")).element,
-        ltk.Text(f"Author: {author}").element,
+        ltk.Heading1(name.replace("_", " "))
+            .addClass("name"),
+        ltk.Text(f"Author: {author}")
+            .addClass("author"),
     )
     run()
 

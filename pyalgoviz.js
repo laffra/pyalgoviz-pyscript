@@ -48,7 +48,11 @@ function t(x, y, txt, size=13, font='Arial', color='black') {
 
 function e(msg) {
     /* Draw an error message */
-    text(20, 20, msg, 14, 'Arial', 'red')
+    $(".log-viz").append(
+        $("<div>")
+            .text(msg)
+            .addClass("error")
+    );
 }
 
 function l(x1, y1, x2, y2, color='black', width=1) {
@@ -86,6 +90,14 @@ function a(x, y, radius, startAngle, endAngle, border='black') {
     context.stroke()
 }
 
+function p(string) {
+    $(".log-viz").append(
+        $("<div>")
+            .text(string)
+            .addClass("log-line")
+    );
+}
+
 const audioContext = new (window.AudioContext || window.webkitAudioContext)()
 
 function s(frequency=440, duration=10) {
@@ -118,5 +130,6 @@ line = l;
 number = n;
 
 function render(operations) {
+    $(".log-viz").empty();
     eval(operations)
 }
