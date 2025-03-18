@@ -101,22 +101,6 @@ function p(string) {
 const audioContext = new (window.AudioContext || window.webkitAudioContext)()
 
 function s(frequency=440, duration=10) {
-    const oscillator = audioContext.createOscillator()
-    const gain = audioContext.createGain()
-    const stop = audioContext.currentTime + duration/1000
-
-    gain.connect(audioContext.destination)
-    oscillator.connect(audioContext.destination)
-
-    gain.gain.setValueAtTime(0.01, audioContext.currentTime);
-    oscillator.type = 'sin'
-    oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime)
-    gain.gain.setTargetAtTime(0, stop - 0.01, 0.01);
-    gain.gain.linearRampToValueAtTime(0, stop);
-    // oscillator.start()
-    setTimeout(() => {
-        oscillator.stop()
-    }, duration)
 }
 
 barchart = b;

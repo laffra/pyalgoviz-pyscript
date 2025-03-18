@@ -143,6 +143,9 @@ def next_step(_event=None):
     """ Show the next step """
     state.step = min(len(state.steps.value) - 1, state.step + 1)
 
+def visit(category, name):
+    """ Switch to another algorithm """
+    ltk.window.location = f"?name={category}/{name}"
 
 def load(_event=None):
     """ Load an existing algorithm """
@@ -151,10 +154,16 @@ def load(_event=None):
     def load_algo(event):
         button = ltk.find(event.target)
         category = button.attr("category")
-        ltk.window.location = f"?name={category}/{button.text()}"
+        ltk.find(".ui-dialog").remove()
+        ltk.find("body").animate(
+            {
+                "opacity": 0
+            },
+            lambda: visit(category, button.text())
+        )
 
     ltk.Div([
-        ltk.VBox(ltk.Heading3(category.capitalize()), [
+        ltk.VBox(ltk.Heading3(category), [
             ltk.Button(choice, load_algo)
                 .attr("category", category)
                 .addClass("choice-button")
