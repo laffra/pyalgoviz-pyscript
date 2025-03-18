@@ -178,7 +178,6 @@ def setup_ui():
                     ltk.HBox(
                         ltk.Button("run", run),
                         ltk.Button("Prev", previous_step),
-                        ltk.Label("Step:"),
                         progress.addClass("progress"),
                         ltk.Label(state.step).addClass("step-label"),
                         ltk.Button("Next", next_step),
