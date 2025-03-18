@@ -180,7 +180,12 @@ def handle_request(sender, topic, request):
             result = [error_lineno, str(e)]
             response = "error"
     elif topic == "load":
-        response, result = load_algorithm(json.loads(request))
+        try:
+            response, result = load_algorithm(json.loads(request))
+        except Exception:
+            tip = "Press the <b>Load...</b> button to try any of the built-in algorithms."
+            msg = f"Cannot load {request}<p>{tip}"
+            response, result = "error", [ 1, msg ]
     else:
         result = f"Unknown topic: {topic}"
         response = "error"
