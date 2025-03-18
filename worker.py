@@ -102,10 +102,7 @@ def load_algorithm(name):
         author = mod.body[2].value.value
         algorithm = getsource(mod.body[3], lines)
         visualization = getsource(mod.body[4], lines)
-        return [
-            "source",
-            [ name, author, algorithm, visualization ]
-        ]
+        return [ name, author, algorithm, visualization ]
 
 def load_choices():
     """ Loads the algorithm choices. """
@@ -117,13 +114,16 @@ def load_choices():
         ]
         for category in os.listdir("/home/pyodide/visualizations/")
     }
+    publish("choices", choices)
+
+def publish(topic, data):
+    """ Publishes data to the main process. """
     polyscript.xworker.sync.publish(
         "Worker",
         "Main",
-        "choices",
-        choices,
+        topic,
+        data
     )
-
 
 def handle_request(sender, topic, request):
     """
@@ -134,10 +134,6 @@ def handle_request(sender, topic, request):
         script, visualization = json.loads(request)
         try:
             start = time.time()
-            result = {
-                "viz": [],
-                "log": [],
-            }
             state = globals()
             state.update({
                 "line": line,
@@ -171,7 +167,7 @@ def handle_request(sender, topic, request):
                     viz.append(f"error(\"Visualization error at line {error_lineno}: {e}\")")
                 finally:
                     state["print"] = algo_print
-                result["viz"].append([ lineno, "\n".join(viz) ])
+                publish("trace", [ lineno, "\n".join(viz) ])
                 return step
 
             log = []
@@ -180,31 +176,21 @@ def handle_request(sender, topic, request):
                 exec(script, state, state)
             finally:
                 sys.settrace(None)
-            result["log"] = log[::]
-            response = "visualize"
+            publish("log", log[::])
         except Exception as e:
             tb = traceback.extract_tb(sys.exc_info()[2])
             error_lineno = tb[-1].lineno
-            result = [error_lineno, str(e)]
-            response = "error"
+            publish("error", [error_lineno, str(e)])
     elif topic == "load":
         try:
-            response, result = load_algorithm(json.loads(request))
+            publish("source", load_algorithm(json.loads(request)))
         except Exception:
             tip = "Press the <b>Load...</b> button to try any of the built-in algorithms."
             msg = f"Cannot load {request}<p>{tip}"
-            response, result = "error", [ 1, msg ]
+            publish("error", [ 1, msg ])
             traceback.print_exc()
     else:
-        result = f"Unknown topic: {topic}"
-        response = "error"
-
-    polyscript.xworker.sync.publish(
-        "Worker",
-        "Main",
-        response,
-        json.dumps(result),
-    )
+        publish("error", json.dumps(f"Unknown topic: {topic}"))
 
 polyscript.xworker.sync.handler = handle_request
 polyscript.xworker.sync.subscribe("Worker", "run", "pyodide-worker")
@@ -213,9 +199,4 @@ polyscript.xworker.sync.subscribe("Worker", "load", "pyodide-worker")
 sys.path.append("/home/pyodide/visualizations")
 load_choices()
 
-polyscript.xworker.sync.publish(
-    "Worker",
-    "Main",
-    "ready",
-    ""
-)
+publish("ready", "")

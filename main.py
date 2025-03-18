@@ -23,39 +23,30 @@ VISUALIZATION = "# Your visualization logic goes here."
 
 class State(ltk.Model):
     """ The state for the algorithm visualization """
-    speed_human: int = 1
-    speed_delay: float = 0.01
     step: int = 0
     steps = []
     step_count = 0
-    auto_run = True
     choices = {}
 
     def changed(self, name, value):
-        if name == "speed_human":
-            delay = [0.1, 0.01, 0][self.speed_human]
-            self.speed_delay = delay
-            if state.auto_run:
-                show(0)
-        elif name == "step":
-            if value is not None:
+        if name == "step":
+            try:
                 render_current()
-        elif name == "auto_run":
-            if value:
-                show(0)
+            except Exception:
+                pass
 
 
 state = State()
 editor_algo = editor.Editor(ALGORITHM)
 editor_viz = editor.Editor(VISUALIZATION)
-auto_run = ltk.Switch("auto-run", state.auto_run)
-progress = ltk.Slider(state.step, 0, 0)
+progress = ltk.Slider(state.step, 0, 1000)
 
 progress.on("slide", ltk.proxy(lambda *args: progress.trigger("change")))
 
 @ltk.callback
 def run(_event=None):
     """ Run the current algorithm """
+    clear_steps()
     ltk.publish(
         "Main",
         "Worker",
@@ -65,59 +56,38 @@ def run(_event=None):
     ltk.window.clear()
     ltk.window.text(15, 125, "Running...", 20, "Arial", "green")
 
-@ltk.callback
-def changed(_event=None):
-    """ Run the current algorithm """
-    if auto_run.checked():
-        run()
-
-editor_algo.on("change", changed)
-editor_viz.on("change", changed)
-
-
 def render_current():
     """ Render the current step """
-    if state.step >= state.step_count.value:
-        return
     step = state.steps[state.step]
     lineno, viz = step
     ltk.window.clear()
-    try:
-        ltk.window.render(viz)
-    except Exception as e:
-        print("JS Render error", e)
-        ltk.window.text(25, 25, f"Internal JS render error: {e}", 15, "Arial", "red")
-        for n, line in enumerate(viz.split("\n")):
-            if "range" in line:
-                ltk.window.text(25, 35 + n*16, f"{n}: {line}", 15, "Arial", "black")
+    ltk.window.render(viz)
     editor_algo.mark_line(lineno - 1)
 
-
-def show(step=-1):
-    """ Show the current algorithm """
-    if step >= 0:
-        state.step = step
-    if state.speed_delay == 0:
-        state.step += 10
+def trace(data):
+    """ Add one trace step for the current algorithm """
+    state.steps.append(data)
+    state.step_count += 1
     render_current()
     state.step += 1
-    if state.step < state.step_count.value:
-        ltk.schedule(show, f"show step {state.step}", state.speed_delay)
-    else:
-        next_step()
+    progress.element.slider("option", "max", str(max(1000, state.step_count)))
 
 
-def visualize(data):
-    """ Visualize the current algorithm """
-    state.steps = data["viz"]
-    state.step_count = len(data["viz"])
-    progress.element.slider("option", "max", str(state.step_count))
+def clear_steps():
+    """ Clear the trace steps """
+    state.steps.clear()
+    state.step = 0
+    state.step_count = 0
+    ltk.find(".log-algo .log-line").empty()
     ltk.window.init()
     ltk.window.text(15, 125, "Loading...", 20, "Arial", "green")
-    ltk.schedule(lambda: show(0), "show step 0", 0)
-    ltk.find(".log-algo .log-line").empty()
-    print("vis", data["log"])
-    for line in data["log"]:
+    
+
+def log(data):
+    """ Show the print statements made by the algorithm """
+    print("Run finished")
+    progress.element.slider("option", "max", str(state.step_count))
+    for line in data:
         ltk.find(".log-algo").append(
             ltk.Div(line)
                 .addClass("log-line")
@@ -142,6 +112,7 @@ def previous_step(_event=None):
 def next_step(_event=None):
     """ Show the next step """
     state.step = min(len(state.steps.value) - 1, state.step + 1)
+
 
 def visit(category, name):
     """ Switch to another algorithm """
@@ -206,13 +177,10 @@ def setup_ui():
                     editor_algo,
                     ltk.HBox(
                         ltk.Button("run", run),
-                        auto_run,
-                        ltk.Select(["Slow", "Medium", "Fast"], state.speed_human)
-                            .addClass("speed"),
                         ltk.Button("Prev", previous_step),
                         ltk.Label("Step:"),
-                        ltk.Label(state.step).addClass("step-label"),
                         progress.addClass("progress"),
+                        ltk.Label(state.step).addClass("step-label"),
                         ltk.Button("Next", next_step),
                         ltk.Button("Load...", load)
                             .attr("id", "load-button")
@@ -253,7 +221,8 @@ def worker_ready(request):
 
 def setup_worker():
     """ Setup the worker """
-    ltk.subscribe("Main", "visualize", visualize)
+    ltk.subscribe("Main", "trace", trace)
+    ltk.subscribe("Main", "log", log)
     ltk.subscribe("Main", "error", show_error)
     ltk.subscribe("Main", "ready", worker_ready)
     ltk.subscribe("Main", "source", load_source)

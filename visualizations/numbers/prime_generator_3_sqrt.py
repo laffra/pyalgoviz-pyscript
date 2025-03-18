@@ -49,7 +49,6 @@ def __visualization():
         rect(X, y, 395, 40, '#333')
         text(X+30, y+30, s, 30, color='lightblue')
     
-    if __lineno__ in [13, 17]:
-        drawGrid()         
-        drawLabel(Y-70, 'Primes to 50 - SQRT')
-        drawLabel(Y+230, 'Algorithm took %.2f sec.' % (end-start))
+    drawGrid()         
+    drawLabel(Y-70, 'Primes to 50 - SQRT')
+    drawLabel(Y+230, 'Algorithm took %.2f sec.' % (end-start))

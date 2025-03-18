@@ -17,7 +17,7 @@ def __algorithm():
     start = time.time()
 
     def isPrime(n):
-        for factor in range(2, n/2 + 1):
+        for factor in range(2, n//2 + 1):
             if n % factor == 0:
                 return False
         return n>1
@@ -49,7 +49,6 @@ def __visualization():
         rect(X, y, 395, 40, '#333')
         text(X+30, y+30, s, 30, color='lightblue')
     
-    if __lineno__ in [13, 17]:
-        drawGrid()         
-        drawLabel(Y-70, 'Primes to 50 - Halfway')
-        drawLabel(Y+230, 'Algorithm took %.2f sec.' % (end-start))
+    drawGrid()         
+    drawLabel(Y-70, 'Primes to 50 - Halfway')
+    drawLabel(Y+230, 'Algorithm took %.2f sec.' % (end-start))
