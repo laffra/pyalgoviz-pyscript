@@ -37,7 +37,7 @@ def __algorithm():
     # http://en.wikipedia.org/wiki/Merge_sort
 
 def __visualization():
-    barchart(10, 20, 500, 150, data, scale=3)
+    barchart(30, 20, 500, 150, data, scale=3)
 
     def segment(index1, index2, name, color):
         w = min(15, 500/len(data))

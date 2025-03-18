@@ -15,6 +15,7 @@ code, find dependencies, and perform code completion.
 
 from builtins import *
 
+import ast
 import inspect
 import importlib
 import json
@@ -22,6 +23,7 @@ import math
 import os
 import textwrap
 import traceback
+import types
 import sys
 import time
 
@@ -83,32 +85,38 @@ def beep(frequency=440, duration=10):
     viz.append(f"s({frequency},{duration})")
 
 
-def getsource(func):
+def getsource(function, lines):
     """ Returns the source code of a function. """
-    lines = inspect.getsource(func).split("\n")
-    return textwrap.dedent("\n".join(lines[1:]))
+    code = "\n".join(lines[function.lineno:function.end_lineno])
+    return textwrap.dedent(code)
 
 
 def load_algorithm(name):
     """ Loads the algorithm. """
-    mod = importlib.import_module(f"visualizations.{name}")
-    return [
-        "source",
-        [
-            mod.__name,       # pylint: disable=protected-access
-            mod.__author,       # pylint: disable=protected-access
-            getsource(mod.__algorithm),       # pylint: disable=protected-access
-            getsource(mod.__visualization),   # pylint: disable=protected-access
+    filename = f"visualizations/{name}.py"
+    with open(filename, encoding="utf-8") as f:
+        source = f.read()
+        lines = source.split("\n")
+        mod = ast.parse(source)
+        name = mod.body[1].value.value
+        author = mod.body[2].value.value
+        algorithm = getsource(mod.body[3], lines)
+        visualization = getsource(mod.body[4], lines)
+        return [
+            "source",
+            [ name, author, algorithm, visualization ]
         ]
-    ]
 
 def load_choices():
     """ Loads the algorithm choices. """
-    choices = [
-        os.path.splitext(f)[0]
-        for f in os.listdir("/home/pyodide/visualizations/")
-        if f.endswith('.py') and not f.startswith('__')
-    ]
+    choices = {
+        category: [
+            os.path.splitext(f)[0]
+            for f in os.listdir(f"/home/pyodide/visualizations/{category}")
+            if f.endswith('.py') and not f.startswith('__')
+        ]
+        for category in os.listdir("/home/pyodide/visualizations/")
+    }
     polyscript.xworker.sync.publish(
         "Worker",
         "Main",
@@ -186,6 +194,7 @@ def handle_request(sender, topic, request):
             tip = "Press the <b>Load...</b> button to try any of the built-in algorithms."
             msg = f"Cannot load {request}<p>{tip}"
             response, result = "error", [ 1, msg ]
+            traceback.print_exc()
     else:
         result = f"Unknown topic: {topic}"
         response = "error"
@@ -201,6 +210,7 @@ polyscript.xworker.sync.handler = handle_request
 polyscript.xworker.sync.subscribe("Worker", "run", "pyodide-worker")
 polyscript.xworker.sync.subscribe("Worker", "load", "pyodide-worker")
 
+sys.path.append("/home/pyodide/visualizations")
 load_choices()
 
 polyscript.xworker.sync.publish(

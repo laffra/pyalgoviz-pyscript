@@ -83,5 +83,5 @@ def __visualization():
         text(55+x2, 125+y2, list(pos.keys())[list(pos.values()).index((x2,y2))], 15)
 
     #Connecting last node to first node on convex hull.    
-    if __lineno__ > 46 and hull == convex_hull_points:
+    if __lineno__ > 44 and hull == convex_hull_points:
         line(60+x2, 120+y2, 60+0, 120+100, 'green')

@@ -13,21 +13,6 @@ __name = "Dutch national flag problem"
 __author = "stasiek7776"
 
 def __algorithm():
-    #def buzzSort(L):
-    #    for i in range(len(L)):
-    #        j = binarySearch(L, L[i], i-1)
-    #        if j >= 0 and i != j:
-    #            L.insert(j, L.pop(i))
-    #
-    #def binarySearch(L, value, max):
-    #    min = 0
-    #    while max>=min:
-    #        mid = (min + max) // 2
-    #        if L[mid] < value: min = mid + 1
-    #        elif L[mid] > value: max = mid - 1
-    #        else: return mid
-    #    return min
-
     def samp(A, mid):
         i = 0
         j = 0
@@ -48,8 +33,6 @@ def __algorithm():
     shuffle(data)
 
     samp(data, 2)
-
-    #buzzSort(data)
 
     # Insertion sort with n log n behavior invented by Chris Laffra
 
