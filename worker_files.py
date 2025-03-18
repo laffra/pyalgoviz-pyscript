@@ -32,7 +32,7 @@ files = {
     "visualizations/graphs/dijkstra_shortest_path.py": "visualizations/graphs/dijkstra_shortest_path.py",
     "visualizations/graphs/convex_hulls.py": "visualizations/graphs/convex_hulls.py",
     "visualizations/graphs/mst.py": "visualizations/graphs/mst.py",
-    "visualizations/numbers/fibonacci___golden_ratio.py": "visualizations/numbers/fibonacci___golden_ratio.py",
+    "visualizations/numbers/fibonacci_golden_ratio.py": "visualizations/numbers/fibonacci_golden_ratio.py",
     "visualizations/numbers/fibonnacci_generator.py": "visualizations/numbers/fibonnacci_generator.py",
     "visualizations/numbers/gaussian_elimination.py": "visualizations/numbers/gaussian_elimination.py",
     "visualizations/numbers/mandelbrot_set.py": "visualizations/numbers/mandelbrot_set.py",
