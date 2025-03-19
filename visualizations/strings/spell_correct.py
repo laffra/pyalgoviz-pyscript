@@ -38,9 +38,9 @@ def __algorithm():
         candidates = known([w]) or known(edits1(w)) or known_edits2(w) or [w]
         return max(candidates, key=NWORDS.get)
 
-    target = 'dag'
-    correction = correct(target)
-    print(target, '==>', correction)
+    for target in ["dag", "cot", "smitten", "dogyg"]:
+        correction = correct(target)
+        print(target, '==>', correction)
 
 def __visualization():
     vars = [[ 'DICT:', DICT],
@@ -60,6 +60,4 @@ def __visualization():
             v = '[' + ','.join(v[:10]) + ', ... %d more]' % (len(v)-10)
         text(120, 80+n*20, v)
     
-    text(10, 400, target, 32)
-    text(100, 400, '==>', 32)
-    text(200, 400, correction, 32)
+    text(10, 400, f"Correcting: {target}...", 32)

@@ -40,8 +40,8 @@ def __algorithm():
             return [(cost+penalty, value) for cost,value in prefix[k]]
         return [(-1,'')]
       
-    COST_SKIP  = 1     # cost of  "cart" ==> "cat"
-    COST_SWAP  = 2     # cost of  "cta"  ==> "cat"
+    COST_SKIP  = 1   # cost of  "cart" ==> "cat"
+    COST_SWAP  = 2   # cost of  "cta"  ==> "cat"
     COST_SWAP2 = 4   # cost of  "tac"  ==> "cat"
     COST_SUBST = 3   # cost of  "cit"  ==> "cat"
 
