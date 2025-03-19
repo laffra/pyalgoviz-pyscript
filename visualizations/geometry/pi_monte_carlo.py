@@ -21,29 +21,20 @@ def __algorithm():
     total = 2000
 
     for i in range(total):
-        x = (random.random() * 2) - 1
-        y = (random.random() * 2) - 1
-        if math.sqrt(x**2 + y**2) < 1.0:
-            inside.append((x,y))
-        else:
-            outside.append((x,y))
-
+        x, y = (random.random() * 2) - 1, (random.random() * 2) - 1
+        (inside if math.sqrt(x**2 + y**2) < 1.0 else outside).append((x,y))
         pi = (float(len(inside)) / total) * 4
 
-    print('''
-    PI=%s 
-
-    At position 17,387,594,880 of Pi you find the sequence 0123456789.
-    ''' % pi)
+    print("At position 17,387,594,880 of Pi you find the sequence 0123456789.")
+    print(f"PI={pi}") 
 
 def __visualization():
-    circle(300, 223, 220)
-
-    if __lineno__ > 16:
+    if __lineno__ > 12:
+        circle(300, 223, 220)
         for x,y in inside:
             circle(300 + x * 220, 223 + y * 220, 5, "green")
         for x,y in outside:
             circle(300 + x * 220, 223 + y * 220, 5, "red")
+        text(145, 550, "PI=%.10f" % pi, size=25)
     else:
-        text(180, 200, "Monte Carlo Estimation", size=25)
-        text(145, 250, "Dart %d, PI=%.10f" % (i, pi), size=25)
+        text(145, 250, "Dart %d/%d, PI=%.10f" % (i, total, pi), size=25)
