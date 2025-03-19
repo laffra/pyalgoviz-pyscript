@@ -34,6 +34,7 @@ import polyscript
 
 viz = []
 log = []
+last_lineno = 0
 lineno = 0
 basic_state = {}
 basic_state.update(globals())
@@ -162,20 +163,24 @@ def handle_request(sender, topic, request):
     """
     Handles requests received by the worker process.
     """
-    global log
+    global log, last_lineno
     if topic == "run":
         script, visualization = json.loads(request)
         try:
             start = time.time()
             state = get_state()
+            last_lineno = 0
 
             def step(frame, event, arg):
-                global viz, lineno
+                global viz, lineno, last_lineno
                 viz = []
                 filename = frame.f_code.co_filename
                 if filename != "<string>":
                     return step
                 lineno = frame.f_lineno
+                if lineno == last_lineno:
+                    return step
+                last_lineno = lineno
                 if time.time() - start > 10:
                     raise TimeoutError("Ran more than 10 seconds")
                 state.update(frame.f_locals)
