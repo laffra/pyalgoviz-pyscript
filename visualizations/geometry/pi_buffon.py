@@ -36,25 +36,22 @@ def __algorithm():
         if min(x1,x2)%L>=2*D and max(x1,x2)%L<=2*D:
             touching.append((x1,y1,x2,y2))
 
-    PI = 1.0*len(needles)/len(touching)
-    print(len(needles), len(touching), PI)
+    PI = len(needles)/len(touching)
 
 def __visualization():
     text(W+45, 50, '%d random needles' % len(needles))
     text(W+45, 70, '%d touching' % len(touching))
+    rect(25, 25, W, H)
+    for x in range(0, W, L):
+        line(x+25, 0+25, x+25, H+25, '#AAA')
 
-    if __lineno__ > 22:
-        text(W+45, 200, 'PI = %s' % PI, 15)
+    rect(W+35, 270, 140, 70, 'black')
+    text(W+55, 300, 'Buffon\'s', 25, 'Arial', 'lavender')
+    text(W+55, 330, 'Needles', 25, 'Arial', 'lavender')
 
-        rect(W+35, 270, 140, 70, 'black')
-        text(W+55, 300, 'Buffon\'s', 25, 'Arial', 'lavender')
-        text(W+55, 330, 'Needles', 25, 'Arial', 'lavender')
+    for x1,y1,x2,y2 in needles:
+        color = 'red' if (x1,y1,x2,y2) in touching else 'green'
+        line(x1+25,y1+25,x2+25,y2+25, color, 1)
 
-        rect(25, 25, W, H)
-
-        for x in range(0, W, L):
-            line(x+25, 0+25, x+25, H+25, '#AAA')
-
-        for x1,y1,x2,y2 in needles:
-            color = 'red' if (x1,y1,x2,y2) in touching else 'green'
-            line(x1+25,y1+25,x2+25,y2+25, color, 1)
+    text(W+45, 200, 'PI = %s' % (len(needles)/len(touching)), 15)
+    
