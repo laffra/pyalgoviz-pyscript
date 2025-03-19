@@ -64,6 +64,7 @@ function l(x1, y1, x2, y2, color='black', width=1) {
     context.moveTo(x1, y1)
     context.lineTo(x2, y2)
     context.stroke()
+    context.lineWidth = 1
 }
 
 function r(x, y, w, h, fill='white', border='black') {
