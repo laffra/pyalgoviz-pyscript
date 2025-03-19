@@ -23,7 +23,8 @@ def __algorithm():
         
     numbers = [
        15,25,1,8,7,16,21,2,4,13,6,5,12,22,34,14,18,28,24,20,17
-    ]
+    ] * 10
+    
     heap = makeHeap(numbers)
     result = []
     while heap:
@@ -34,8 +35,8 @@ def __visualization():
     text(200, 150, 'Unordered List of Tasks')
 
     if heap:
-        rect(20, 180, 500, 230)
-        text(200, 400, 'Temporary Binary Min-Heap')
+        rect(20, 180, 500, 300)
+        text(200, 500, 'Temporary Binary Min-Heap')
         prev_start, prev_count = 0,1
         for level in range(0, 1 + int(math.log(len(heap), 2))):
             y = 220 + level * 35
