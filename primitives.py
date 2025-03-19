@@ -20,7 +20,7 @@ def rect(x, y, w, h, fill="white", border="gray"):
 def circle(x, y, radius, fill="white", border="gray"):
     """ Draw a circle """
 
-def arc(x, y, radius, start_angle, end_angle, color='black'):
+def arc(x, y, radius, start_angle, end_angle, color='black', width=1):
     """ Draw an arc """
 
 def barchart(x, y, w, h, data, highlight=None, fill="black", scale=1):

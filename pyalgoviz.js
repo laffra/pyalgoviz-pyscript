@@ -85,10 +85,11 @@ function c(x, y, radius, fill='white', border='black') {
     context.stroke()
 }
 
-function a(x, y, radius, startAngle, endAngle, border='black') {
+function a(x, y, radius, startAngle, endAngle, border='black', width=1) {
     context.beginPath()
     context.arc(x, y, radius, startAngle, endAngle)
     context.strokeStyle = border
+    context.lineWidth = width
     context.stroke()
 }
 

@@ -55,9 +55,9 @@ def circle(x, y, radius, fill="white", border="gray"):
     viz.append(f"c({x},{y},{radius},{repr(fill)},{repr(border)})")
 
 
-def arc(x, y, radius, startAngle, endAngle, color='black'):
+def arc(x, y, radius, startAngle, endAngle, color='black', width=1):
     """ Draw an arc """
-    viz.append(f"a({x},{y},{radius},{startAngle},{endAngle},{repr(color)})")
+    viz.append(f"a({x},{y},{radius},{startAngle},{endAngle},{repr(color)},{width})")
 
 
 def rect(x, y, w, h, fill="white", border="gray"):

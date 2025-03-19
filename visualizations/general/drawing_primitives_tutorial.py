@@ -15,9 +15,10 @@ __author = "laffra"
 def __algorithm():
     # generate some numbers for x, y, and n
 
-    for x in range(50, 500, 50):
-        for y in range(50, 400, 50):
-            n = y // 50
+    for k in range(20):
+        for x in range(50, 500, 50):
+            for y in range(50, 400, 50):
+                n = y // 50
 
 def __visualization():
     # visualize the state, i.e., the values for x, y, and n
@@ -27,13 +28,9 @@ def __visualization():
     rect(450, 50, 50 + n*10, 50 + n*10, fill="brown", border="lightyellow")
     line(50, 50, x, y, color="purple", width=6)
     circle(300, 200, n * 25, fill="transparent", border="green")
-    arc(100, 
-        325, 
-        innerRadius=50, 
-        outerRadius=100, 
-        startAngle=(n - 1) * 2 * pi/7,
-        endAngle=n * 2 * pi/7,
-        color="orange")
+    text(50, 450, f"Loop {k+1} of 20")
+    arc(100, 325, 30, (n - 1) * 2 * pi/4, n * 2 * pi/4, "orange", 3)
+
     if __lineno__ == 3:
         beep(x, 100)
 
