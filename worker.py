@@ -187,7 +187,7 @@ def handle_request(sender, topic, request):
                 state["__lineno__"] = lineno
                 try:
                     state["print"] = viz_print
-                    exec(visualization, state, state)
+                    exec(visualization, state, {})
                 except Exception as e:
                     tb = traceback.extract_tb(sys.exc_info()[2])
                     error_lineno = tb[-1].lineno
@@ -200,7 +200,7 @@ def handle_request(sender, topic, request):
             log = []
             try:
                 sys.settrace(step)
-                exec(script, state, state)
+                exec(script, state, {})
             finally:
                 sys.settrace(None)
             publish("log", log[::])
