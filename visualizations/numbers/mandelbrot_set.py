@@ -37,13 +37,10 @@ def __algorithm():
     image = mandelbrot(-2.0, 1.0, -1.0, 1.0, 10)
 
 def __visualization():
-    if __lineno__ == 22:
-    
+    if __lineno__ in [8, 22]:
         D = 400/W
-    
-        rect(0,0,600,600,"black")
-
-        for y,row in enumerate(image):
+        rect(0,0,600,450,"black")
+        for y,row in enumerate(img):
             for x,color in enumerate(row):
                 r = color * 256/18
                 g = color * 256/12

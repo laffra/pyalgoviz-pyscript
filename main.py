@@ -60,8 +60,9 @@ def render_current():
     """ Render the current step """
     step = state.steps[state.step]
     lineno, viz = step
-    ltk.window.clear()
-    ltk.window.render(viz)
+    if viz:
+        ltk.window.clear()
+        ltk.window.render(viz)
     editor_algo.mark_line(lineno - 1)
 
 def trace(data):
