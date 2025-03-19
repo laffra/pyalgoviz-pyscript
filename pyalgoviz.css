@@ -41,10 +41,6 @@
     background-color: rgb(207, 214, 217)
 }
 
-.choice-button {
-    margin-right: 8px;
-}
-
 .log-algo {
     width: 100%;
     height: 100%;
@@ -96,8 +92,19 @@
     position: relative;
 }
 
+.related-container {
+    gap: 8px;
+}
+
 .related {
     position: absolute;
     bottom: 0px;
     padding: 8px
+}
+
+.related .choice-button {
+    max-width: 120px;
+    height: 22px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

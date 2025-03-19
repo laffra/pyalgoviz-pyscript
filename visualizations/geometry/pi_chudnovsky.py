@@ -42,7 +42,6 @@ def __algorithm():
 def __visualization():
     beep(__lineno__*200, 1000)
 
-    import math
     from decimal import Decimal
 
     PI = pi * Decimal(10005).sqrt()/4270934400

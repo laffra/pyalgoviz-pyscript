@@ -39,7 +39,7 @@ class State(ltk.Model):
 state = State()
 editor_algo = editor.Editor(ALGORITHM)
 editor_viz = editor.Editor(VISUALIZATION)
-progress = ltk.Slider(state.step, 0, 1000)
+progress = ltk.Slider(state.step, 0, 3000)
 
 progress.on("slide", ltk.proxy(lambda *args: progress.trigger("change")))
 
@@ -70,7 +70,7 @@ def trace(data):
     state.step_count += 1
     render_current()
     state.step += 1
-    progress.element.slider("option", "max", str(max(1000, state.step_count)))
+    progress.element.slider("option", "max", str(max(3000, state.step_count)))
 
 
 def clear_steps():
@@ -85,7 +85,6 @@ def clear_steps():
 
 def log(data):
     """ Show the print statements made by the algorithm """
-    print("Run finished")
     progress.element.slider("option", "max", str(state.step_count))
     for line in data:
         ltk.find(".log-algo").append(
@@ -129,7 +128,7 @@ def load_algo(event):
         {
             "opacity": 0
         },
-        lambda: visit(category, button.text())
+        lambda: visit(category, button.attr("name"))
     )
 
 
@@ -139,6 +138,7 @@ def load(_event=None):
         ltk.VBox(ltk.Heading3(category), [
             ltk.Button(choice, load_algo)
                 .attr("category", category)
+                .attr("name", choice)
                 .addClass("choice-button")
             for choice in sorted(choices)
         ]).addClass("choice-category")
@@ -168,15 +168,16 @@ def show_related(names):
         ltk.HBox(
             ltk.Label("Related Scripts:"),
             [
-                ltk.Button(name, load_algo)
+                ltk.Button(name.replace("-"," ").replace("_", " "), load_algo)
                     .attr("category", category)
+                    .attr("name", name)
                     .addClass("choice-button")
                 for category, name in [entry.split("/") for entry in names]
             ],
-            ltk.Button("Choose Any...", load)
-        ).element
+            ltk.Button("More...", load)
+                .addClass("choice-button")
+        ).addClass("related-container")
     )
-    print("show_related", [name for name in names])
     
 
 def save_choices(choices):

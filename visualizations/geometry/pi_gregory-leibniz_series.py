@@ -19,7 +19,7 @@ def __algorithm():
     #
     #  pi/4 = 1 - 1/3 + 1/5 - 1/7 + 1/9 - ....
     #
-    def calculatePi(steps=100): 
+    def calculatePi(steps):
         pi = 1
         for k in range(3, 2 * steps, 4):
             pi -= Decimal(1)/k
@@ -32,14 +32,12 @@ def __algorithm():
     In Carl Sagan's novel "Contact", when listing Pi in base 11,
     a circle could be seen inside Pi. This fact never made it to
     the movie.
-    ''' % calculatePi(200))
+    ''' % calculatePi(1000))
 
 def __visualization():
-    import math
-
     error = pi * 4 - Decimal(math.pi)
 
-    text(50, 50, 'steps = %d' % steps, 25)
+    text(50, 50, 'step = %d of %d' % (k/2 + 1, steps), 25)
     text(50, 80, 'pi = %.25f' % (pi * 4), 25)
     text(50, 110, 'PI = %.25f' % math.pi, 25)
     text(50, 140, 'Error = %.25f' % error, 25)

@@ -16,6 +16,7 @@ code, find dependencies, and perform code completion.
 from builtins import *
 
 import ast
+import builtins
 import inspect
 import importlib
 import json
@@ -34,6 +35,8 @@ import polyscript
 viz = []
 log = []
 lineno = 0
+basic_state = {}
+basic_state.update(globals())
 
 
 def line(x1, y1, x2, y2, color="black", width=1):
@@ -111,7 +114,10 @@ def load_related(name):
     category = name.split("/")[0]
     dirname = os.path.dirname(f"visualizations/{name}.py")
     names = [f"{category}/{name.replace(".py", "")}" for name in os.listdir(dirname)]
-    return random.sample(names, 5)
+    try:
+        return random.sample(names, 5)
+    except Exception:
+        return names
 
 
 def load_choices():
@@ -135,6 +141,23 @@ def publish(topic, data):
         data
     )
 
+def get_state():
+    """ Returns the current state of the worker process. """
+    state = {}
+    state.update(basic_state)
+    state.update({
+        "line": line,
+        "text": text,
+        "rect": rect,
+        "barchart": barchart,
+        "circle": circle,
+        "arc": arc,
+        "beep": beep,
+        "print": algo_print,
+    })
+    return state
+
+
 def handle_request(sender, topic, request):
     """
     Handles requests received by the worker process.
@@ -144,17 +167,7 @@ def handle_request(sender, topic, request):
         script, visualization = json.loads(request)
         try:
             start = time.time()
-            state = globals()
-            state.update({
-                "line": line,
-                "text": text,
-                "rect": rect,
-                "barchart": barchart,
-                "circle": circle,
-                "arc": arc,
-                "beep": beep,
-                "print": algo_print,
-            })
+            state = get_state()
 
             def step(frame, event, arg):
                 global viz, lineno
@@ -166,7 +179,6 @@ def handle_request(sender, topic, request):
                 if time.time() - start > 10:
                     raise TimeoutError("Ran more than 10 seconds")
                 state.update(frame.f_locals)
-                state.update(globals())
                 state["__lineno__"] = lineno
                 try:
                     state["print"] = viz_print
@@ -191,6 +203,7 @@ def handle_request(sender, topic, request):
             tb = traceback.extract_tb(sys.exc_info()[2])
             error_lineno = tb[-1].lineno
             publish("error", [error_lineno, str(e)])
+            traceback.print_exc()
     elif topic == "load":
         try:
             name = json.loads(request)

@@ -36,10 +36,9 @@ def __algorithm():
 
     In 1850, William Shanks took 15 years to estimate
     Pi to 707 digits. Turns out he made an error at 527
-    ''' % pi_archimedes(5))
+    ''' % pi_archimedes(10))
 
 def __visualization():
-    import math
     cx, cy, r, angle = 450, 270, 200, math.pi/4
     colors = [ 'orange', 'red', 'blue', 'teal' ]
     x1,y1 = cx + r*math.cos(angle), cy - r*math.sin(angle)
@@ -48,8 +47,10 @@ def __visualization():
     PI = (edges * math.sqrt(edge_length_squared) / 2)
     text(10, 30, 'Step: %d' % step, 25)
     text(10, 60, 'Number of sides: %d' % edges, 25)
-    text(10, 90, 'Pi: %s' % PI, 25)
-    text(10, 120, 'Error: %.10f' % (math.pi - PI), 25)
+
+    if __lineno__ >= 15:
+        text(10, 90, 'Pi: %s' % PI, 25)
+        text(10, 120, 'Error: %.10f' % (math.pi - PI), 25)
 
     for edge in range(edges+1):
         x2,y2 = cx + r*math.cos(angle), cy - r*math.sin(angle)
