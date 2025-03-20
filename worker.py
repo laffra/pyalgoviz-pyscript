@@ -142,7 +142,7 @@ def publish(topic, data):
         data
     )
 
-def get_state():
+def get_state(print_function):
     """ Returns the current state of the worker process. """
     state = {}
     state.update(basic_state)
@@ -154,7 +154,7 @@ def get_state():
         "circle": circle,
         "arc": arc,
         "beep": beep,
-        "print": algo_print,
+        "print": print_function,
     })
     return state
 
@@ -168,7 +168,8 @@ def handle_request(sender, topic, request):
         script, visualization = json.loads(request)
         try:
             start = time.time()
-            state = get_state()
+            global_state = get_state(algo_print)
+            viz_state = get_state(viz_print)
             last_lineno = 0
 
             def step(frame, event, arg):
@@ -183,24 +184,21 @@ def handle_request(sender, topic, request):
                 last_lineno = lineno
                 if time.time() - start > 10:
                     raise TimeoutError("Ran more than 10 seconds")
-                state.update(frame.f_locals)
-                state["__lineno__"] = lineno
+                viz_state.update(frame.f_locals)
+                viz_state["__lineno__"] = lineno
                 try:
-                    state["print"] = viz_print
-                    exec(visualization, state, {})
+                    exec(visualization, viz_state, viz_state)
                 except Exception as e:
                     tb = traceback.extract_tb(sys.exc_info()[2])
                     error_lineno = tb[-1].lineno
                     viz.append(f"error(\"Visualization error at line {error_lineno}: {e}\")")
-                finally:
-                    state["print"] = algo_print
                 publish("trace", [ lineno, "\n".join(viz) ])
                 return step
 
             log = []
             try:
                 sys.settrace(step)
-                exec(script, state, {})
+                exec(script, global_state, global_state)
             finally:
                 sys.settrace(None)
             publish("log", log[::])
