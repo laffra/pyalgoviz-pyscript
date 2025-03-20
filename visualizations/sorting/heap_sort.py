@@ -31,6 +31,7 @@ def __algorithm():
         result.append(heappop(heap))
 
 def __visualization():
+    import math
     barchart(20, 20, 500, 110, numbers, scale=2)
     text(200, 150, 'Unordered List of Tasks')
 
