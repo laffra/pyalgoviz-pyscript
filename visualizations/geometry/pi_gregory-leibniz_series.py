@@ -35,6 +35,8 @@ def __algorithm():
     ''' % calculatePi(1000))
 
 def __visualization():
+    import math
+    
     error = pi * 4 - Decimal(math.pi)
 
     text(50, 50, 'step = %d of %d' % (k/2 + 1, steps), 25)
