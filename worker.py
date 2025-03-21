@@ -162,7 +162,7 @@ def load_algorithm(name):
         author = mod.body[2].value.value
         algorithm = getsource(mod.body[3], lines)
         visualization = getsource(mod.body[4], lines)
-        return [ name, author, algorithm, visualization ]
+        return [ filename, name, author, algorithm, visualization ]
 
 
 def load_related(name):

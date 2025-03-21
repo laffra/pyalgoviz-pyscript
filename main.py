@@ -153,19 +153,20 @@ def load(_event=None):
 
 def load_source(sources):
     """ Load the algorithm and visualization """
-    name, author, algo, viz = sources
+    filename, name, author, algo, viz = sources
     editor_algo.set(algo)
     editor_viz.set(viz)
+    home = "https://github.com/laffra/pyalgoviz-pyscript"
+    filename = filename.replace("visualizations/", "")
     ltk.find(".log-algo").append(
         ltk.Heading1(name.replace("_", " "))
             .addClass("name"),
-        ltk.HBox(
-            ltk.Label(
-                "This visualization was created using the open-source project "
-                "<a target=_blank "
-                "href='https://github.com/laffra/pyalgoviz-pyscript'>"
-                "PyAlgoViz-PyScript</a>."
-            ),
+        ltk.Div(
+            "See <a target='_blank' "
+            f"href='{home}/blob/main/visualizations/{filename}'>{filename}</a>."
+            "in the open-source project "
+            "<a target=_blank "
+            f"href='{home}'>PyAlgoViz-PyScript</a>."
         ).element,
         ltk.Text(f"Author: {author}")
             .addClass("author"),
