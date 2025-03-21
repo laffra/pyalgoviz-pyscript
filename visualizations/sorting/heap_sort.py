@@ -14,17 +14,16 @@ __author = "laffra"
 
 def __algorithm():
     from heapq import heappush, heappop
+    import random
 
     def makeHeap(iterable):
         heap = [] 
         for value in iterable:
             heappush(heap, value)
         return heap
-        
-    numbers = [
-       15,25,1,8,7,16,21,2,4,13,6,5,12,22,34,14,18,28,24,20,17
-    ] * 10
-    
+
+    numbers = list(random.sample(range(100), 100))
+
     heap = makeHeap(numbers)
     result = []
     while heap:
@@ -32,15 +31,15 @@ def __algorithm():
 
 def __visualization():
     import math
-    barchart(20, 20, 500, 110, numbers, scale=2)
-    text(200, 150, 'Unordered List of Tasks')
+    barchart(20, 20, 500, 210, numbers, scale=2)
+    text(200, 35, 'Unordered List of Tasks')
 
     if heap:
-        rect(20, 180, 500, 300)
+        rect(20,250, 500, 230)
         text(200, 500, 'Temporary Binary Min-Heap')
         prev_start, prev_count = 0,1
         for level in range(0, 1 + int(math.log(len(heap), 2))):
-            y = 220 + level * 35
+            y = 270 + level * 35
             start, count = 2**level-1, 2**level
             for n in range(start, start+count):
                 x = 20 + (n-start+1) * 500/(count+1)
@@ -52,5 +51,5 @@ def __visualization():
                 text(x, y, heap[n])
             prev_start, prev_count = start, count
     else:
-        barchart(20, 200, 500, 110, result, scale=2)
-        text(220, 330, 'Sorted Result')
+        barchart(20, 250, 500, 210, result, scale=2)
+        text(220, 265, 'Sorted Result')
