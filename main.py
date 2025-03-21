@@ -159,6 +159,14 @@ def load_source(sources):
     ltk.find(".log-algo").append(
         ltk.Heading1(name.replace("_", " "))
             .addClass("name"),
+        ltk.HBox(
+            ltk.Label(
+                "This visualization was created using the open-source project "
+                "<a target=_blank "
+                "href='https://github.com/laffra/pyalgoviz-pyscript'>"
+                "PyAlgoViz-PyScript</a>."
+            ),
+        ).element,
         ltk.Text(f"Author: {author}")
             .addClass("author"),
     )
