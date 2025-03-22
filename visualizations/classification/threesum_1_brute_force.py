@@ -10,7 +10,7 @@
 #pylint: disable=invalid-name
 
 __name = "ThreeSum - 1 - Brute Force"
-__author = "laffra"
+__author = "chris@chrislaffra.com"
 
 def __algorithm():
     import itertools

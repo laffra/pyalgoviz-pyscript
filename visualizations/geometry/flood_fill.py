@@ -13,8 +13,6 @@ __name = "flood fill"
 __author = "KingRobertKing"
 
 def __algorithm():
-    __author__ = "www.google.com/+robertking"
-
     grid = '''......#..#..
     ..#...#####.
     ..#.........

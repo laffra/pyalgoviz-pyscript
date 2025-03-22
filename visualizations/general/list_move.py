@@ -10,7 +10,7 @@
 #pylint: disable=invalid-name
 
 __name = "List Move"
-__author = "laffra"
+__author = "chris@chrislaffra.com"
 
 def __algorithm():
     def lstmov(data, src, dst, count):

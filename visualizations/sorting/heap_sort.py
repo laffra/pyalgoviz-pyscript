@@ -10,7 +10,7 @@
 #pylint: disable=invalid-name
 
 __name = "Sorting - Heap Sort"
-__author = "laffra"
+__author = "chris@chrislaffra.com"
 
 def __algorithm():
     from heapq import heappush, heappop

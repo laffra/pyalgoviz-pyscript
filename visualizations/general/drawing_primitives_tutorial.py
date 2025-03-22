@@ -10,7 +10,7 @@
 #pylint: disable=invalid-name
 
 __name = "Drawing Primitives Tutorial"
-__author = "laffra"
+__author = "chris@chrislaffra.com"
 
 def __algorithm():
     # generate some numbers for x, y, and n

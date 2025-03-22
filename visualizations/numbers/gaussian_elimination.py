@@ -25,8 +25,6 @@ def __algorithm():
     see http://en.wikipedia.org/wiki/Gaussian_elimination
     '''
 
-    __author__ = "www.google.com/+robertking"
-
     A = [
         [2, 1, -1],
         [-3, -1, 2],

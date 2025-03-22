@@ -10,7 +10,7 @@
 #pylint: disable=invalid-name
 
 __name = "ThreeSum - 2 - Triple Loop"
-__author = "laffra"
+__author = "chris@chrislaffra.com"
 
 def __algorithm():
     def threesum(L):

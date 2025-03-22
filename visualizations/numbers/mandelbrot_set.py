@@ -10,7 +10,7 @@
 #pylint: disable=invalid-name
 
 __name = "Numbers - Mandelbrot Set"
-__author = "laffra"
+__author = "chris@chrislaffra.com"
 
 def __algorithm():
     ITERATIONS,W,H = 9,20,20

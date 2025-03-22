@@ -10,7 +10,7 @@
 #pylint: disable=invalid-name
 
 __name = "Trees - Height"
-__author = "laffra"
+__author = "chris@chrislaffra.com"
 
 def __algorithm():
     L,V,R = 0,1,2

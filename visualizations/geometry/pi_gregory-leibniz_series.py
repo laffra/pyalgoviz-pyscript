@@ -10,7 +10,7 @@
 #pylint: disable=invalid-name
 
 __name = "Geometry - Pi Gregory-Leibniz Series"
-__author = "laffra"
+__author = "chris@chrislaffra.com"
 
 def __algorithm():
     from decimal import Decimal
@@ -36,7 +36,7 @@ def __algorithm():
 
 def __visualization():
     import math
-    
+
     error = pi * 4 - Decimal(math.pi)
 
     text(50, 50, 'step = %d of %d' % (k/2 + 1, steps), 25)

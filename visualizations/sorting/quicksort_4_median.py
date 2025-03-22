@@ -10,7 +10,7 @@
 #pylint: disable=invalid-name
 
 __name = "Sorting - QuickSort - 4 - Median"
-__author = "laffra"
+__author = "chris@chrislaffra.com"
 
 def __algorithm():
     import random

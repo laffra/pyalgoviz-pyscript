@@ -10,7 +10,7 @@
 #pylint: disable=invalid-name
 
 __name = "Sorting - Insertion Sort"
-__author = "laffra"
+__author = "chris@chrislaffra.com"
 
 def __algorithm():
     def insertionSort(s):

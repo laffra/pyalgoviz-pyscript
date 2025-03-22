@@ -10,7 +10,7 @@
 #pylint: disable=invalid-name
 
 __name = "Sorting - MergeSort"
-__author = "laffra"
+__author = "chris@chrislaffra.com"
 
 def __algorithm():
     def mergeSort(array, start, end):

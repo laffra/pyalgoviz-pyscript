@@ -10,7 +10,7 @@
 #pylint: disable=invalid-name
 
 __name = "Searching - DFS - Non-Recursive"
-__author = "laffra"
+__author = "chris@chrislaffra.com"
 
 def __algorithm():
     tree = (((None,5,(None,9,None)),10,((None,23,None),37,(None,44,None))),52,((None,56,None),68,(((None,79,None),87,None),89,((None,91,None),93,(None,94,None)))))

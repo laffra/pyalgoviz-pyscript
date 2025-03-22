@@ -10,7 +10,7 @@
 #pylint: disable=invalid-name
 
 __name = "Sorting - Using Custom Keys"
-__author = "laffra"
+__author = "chris@chrislaffra.com"
 
 def __algorithm():
     cities = ['Madrid', 'lima', 'Amsterdam', 'Berlin']

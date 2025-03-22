@@ -10,7 +10,7 @@
 #pylint: disable=invalid-name
 
 __name = "Dynamic Programming - Knapsack"
-__author = "laffra"
+__author = "chris@chrislaffra.com"
 
 def __algorithm():
     def knapsack(items, maxweight):

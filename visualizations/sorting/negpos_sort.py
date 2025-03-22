@@ -10,7 +10,7 @@
 #pylint: disable=invalid-name
 
 __name = "Sorting - NegPos Sort"
-__author = "laffra"
+__author = "chris@chrislaffra.com"
 
 def __algorithm():
     def negativePositiveSort(data):

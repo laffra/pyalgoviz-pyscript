@@ -10,7 +10,7 @@
 #pylint: disable=invalid-name
 
 __name = "Searching - Linear Search"
-__author = "laffra"
+__author = "chris@chrislaffra.com"
 
 def __algorithm():
     def linearSearch(seq, t):

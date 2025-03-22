@@ -10,7 +10,7 @@
 #pylint: disable=invalid-name
 
 __name = "Strings - Anagram Check"
-__author = "laffra"
+__author = "chris@chrislaffra.com"
 
 def __algorithm():
     from collections import defaultdict, Counter

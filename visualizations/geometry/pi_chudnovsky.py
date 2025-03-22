@@ -10,7 +10,7 @@
 #pylint: disable=invalid-name
 
 __name = "Geometry - Pi Chudnovsky"
-__author = "laffra"
+__author = "chris@chrislaffra.com"
 
 def __algorithm():
     from decimal import Decimal, getcontext

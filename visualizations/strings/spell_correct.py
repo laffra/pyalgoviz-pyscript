@@ -10,7 +10,7 @@
 #pylint: disable=invalid-name
 
 __name = "Strings - Spell/Correct"
-__author = "laffra"
+__author = "chris@chrislaffra.com"
 
 def __algorithm():
     # See: http://norvig.com/spell-correct.html    

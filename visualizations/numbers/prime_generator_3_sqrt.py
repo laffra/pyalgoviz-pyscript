@@ -10,7 +10,7 @@
 #pylint: disable=invalid-name
 
 __name = "Numbers - Prime Generator - 3 - Sqrt"
-__author = "laffra"
+__author = "chris@chrislaffra.com"
 
 def __algorithm():
     import time, math

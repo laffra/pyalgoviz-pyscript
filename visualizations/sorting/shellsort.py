@@ -10,7 +10,7 @@
 #pylint: disable=invalid-name
 
 __name = "Sorting - ShellSort"
-__author = "laffra"
+__author = "chris@chrislaffra.com"
 
 def __algorithm():
     def shellSort(array):

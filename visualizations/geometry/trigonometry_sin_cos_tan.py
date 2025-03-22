@@ -10,7 +10,7 @@
 #pylint: disable=invalid-name
 
 __name = "Trigonometry - Sin/Cos/Tan"
-__author = "laffra"
+__author = "chris@chrislaffra.com"
 
 def __algorithm():
     import math 

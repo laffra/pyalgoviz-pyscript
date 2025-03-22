@@ -10,7 +10,7 @@
 #pylint: disable=invalid-name
 
 __name = "Geometry - Pi Gregory-Leibniz Series (Graph)"
-__author = "laffra"
+__author = "chris@chrislaffra.com"
 
 def __algorithm():
     from decimal import Decimal
@@ -43,7 +43,7 @@ def __algorithm():
 
 def __visualization():
     import math
-    
+
     rect(50, 30, 500, 200)
     text(15, 65, "Pi", 32)
     line(45, 50, 550, 50, "grey")
