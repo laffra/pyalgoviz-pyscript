@@ -93,7 +93,7 @@ def __visualization():
 
 
     if pivot >= 2:
-        rect(260, 265, 220, 66, fill='none', border='red')
+        rect(260, 265, 220, 66, fill='transparent', border='red')
         text(20, 410, "Z = -1 so we can now find Y = 3 etc", size=32)
     else:
         text(20, 410, "Gaussian Elimination", size=32)
