@@ -55,6 +55,7 @@ def run(_event=None):
         [editor_algo.get(), editor_viz.get()]
     )
     ltk.find("#run-button").attr("disabled", True)
+    ltk.find(".play-button").attr("disabled", True)
     ltk.window.clear()
     ltk.window.text(15, 125, "Running...", 20, "Arial", "green")
 
@@ -95,6 +96,7 @@ def clear_steps():
 def log(data):
     """ Show the print statements made by the algorithm """
     ltk.find("#run-button").attr("disabled", False)
+    ltk.find(".play-button").attr("disabled", False)
     progress.element.slider("option", "max", str(state.step_count))
     for line in data:
         ltk.find(".log-algo").append(
