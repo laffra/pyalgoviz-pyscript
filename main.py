@@ -21,25 +21,28 @@ ALGORITHM = "# Your algorithm goes here."
 CLICK_LOAD = "# Your algorithm goes here.\n\n# Click Load... for an existing example."
 VISUALIZATION = "# Your visualization logic goes here."
 
+worker = None
+
 class State(ltk.Model):
     """ The state for the algorithm visualization """
     step: int = 0
     steps = []
     step_count = 0
     choices = {}
+    speed = 1
 
     def changed(self, name, value):
-        if name == "step":
-            try:
-                render_current()
-            except Exception:
-                pass
+        try:
+            render_current()
+        except Exception:
+            pass
 
 
 state = State()
 editor_algo = editor.Editor(ALGORITHM)
 editor_viz = editor.Editor(VISUALIZATION)
 progress = ltk.Slider(state.step, 0, 3000)
+speed = ltk.Select(["Slow", "Medium", "Fast"], state.speed)
 
 progress.on("slide", ltk.proxy(lambda *args: progress.trigger("change")))
 
@@ -47,6 +50,7 @@ progress.on("slide", ltk.proxy(lambda *args: progress.trigger("change")))
 def run(_event=None):
     """ Run the current algorithm """
     clear_steps()
+    worker.sync.stopped = lambda: False
     ltk.publish(
         "Main",
         "Worker",
@@ -65,6 +69,12 @@ def render_current():
         ltk.window.clear()
         ltk.window.render(viz)
     editor_algo.mark_line(lineno - 1)
+    ltk.find(".progress .ui-slider-handle") \
+        .empty() \
+        .append(
+            ltk.Text(str(state.step))
+                .addClass("step-number")
+        )
 
 def trace(data):
     """ Add one trace step for the current algorithm """
@@ -106,14 +116,27 @@ def show_error(data):
     editor_algo.mark_line(lineno - 1)
 
 
-def previous_step(_event=None):
-    """ Show the previous step """
-    state.step = max(0, state.step - 1)
+def play(step):
+    """ Play the animation """
+    state.step = step
+    render_current()
+    if step < int(state.step_count):
+        delay = [ 0.3, 0.05, 0][state.speed]
+        ltk.schedule(lambda: play(state.step + 1), "play next step", delay)
+        ltk.find(".play-button").attr("disabled", True)
+        ltk.find(".stop-button").attr("disabled", False)
+    else:
+        ltk.find(".play-button").attr("disabled", False)
+        ltk.find(".stop-button").attr("disabled", True)
 
 
-def next_step(_event=None):
-    """ Show the next step """
-    state.step = min(len(state.steps.value) - 1, state.step + 1)
+def stop():
+    """ Stop the animation """
+    worker.sync.stopped = lambda: True
+    state.step = state.step_count - 1
+    ltk.find(".play-button").attr("disabled", False)
+    ltk.find(".stop-button").attr("disabled", True)
+    render_current()
 
 
 def visit(category, name):
@@ -209,14 +232,20 @@ def setup_ui():
                     editor_algo,
                     ltk.HBox(
                         ltk.Button("run", run)
-                            .attr("id", "run-button"),
-                        ltk.Button("Prev", previous_step),
-                        progress.addClass("progress"),
-                        ltk.Label(state.step).addClass("step-label"),
-                        ltk.Button("Next", next_step),
+                            .attr("id", "run-button")
+                            .addClass("big-button"),
+                        ltk.HBox(
+                            ltk.Button("Play", lambda event: play(0))
+                                .addClass("play-button"),
+                            speed,
+                            progress.addClass("progress"),
+                            ltk.Button("Stop", lambda event: stop())
+                                .addClass("stop-button"),
+                        ).addClass("button-box"),
                         ltk.Button("Load...", load)
                             .attr("id", "load-button")
-                            .attr("disabled", True),
+                            .attr("disabled", True)
+                            .addClass("big-button"),
                     ).addClass("controls"),
                 ).addClass("top-left"),
                 editor_viz,
@@ -258,6 +287,7 @@ def worker_ready(request):
 
 def setup_worker():
     """ Setup the worker """
+    global worker
     ltk.subscribe("Main", "trace", trace)
     ltk.subscribe("Main", "log", log)
     ltk.subscribe("Main", "error", show_error)

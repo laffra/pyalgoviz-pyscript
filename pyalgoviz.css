@@ -21,15 +21,34 @@
 
 .progress {
     width: 150px;
-    margin: 4px;
+    margin: 4px 16px 4px 8px;
+}
+
+.big-button {
+    height: 30px;
+    font-size: 16px;
+}
+
+.button-box {
+    background-color: rgb(254, 254, 234);
+    border: 1px solid gray;
+    gap: 8px;
+    padding: 4px 10px;
+}
+
+.progress .ui-slider-handle {
+    width: fit-content;
+    min-width: 10px;
+}
+
+.progress .step-number {
+    position: relative;
+    top: -3px;
+    font-size: 10px;
 }
 
 .ltk-button {
     min-width: 0;
-}
-
-.step-label {
-    min-width: 30px;
 }
 
 .editor, .log-viz, .log-algo {
