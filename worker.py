@@ -28,8 +28,6 @@ import pyscript
 class Runner():
     """ Runner class for running Python code. """
 
-    stop_requested = False
-
     def __init__(self, script, visualization):
         """ Runs the script. """
         self.viz = []
@@ -46,7 +44,6 @@ class Runner():
     def run(self):
         """ Runs the script. """
         try:
-            self.stop_requested = False
             sys.settrace(self.step)
             exec(self.script, self.global_state, self.global_state)
         except Exception as e:
@@ -55,12 +52,6 @@ class Runner():
         finally:
             sys.settrace(None)
         publish("log", self.log[::])
-
-    @classmethod
-    def stop(cls):
-        """ Stop the current execution """
-        print("STOP requested by user")
-        cls.stop_requested = True
 
     def step(self, frame, event, arg):
         """ Step function for the tracer. """
@@ -73,10 +64,11 @@ class Runner():
             publish("trace", [ self.lineno, "\n".join(self.viz) ])
         return self.step
                 
+
     def update(self, frame):
         """ Updates the runner. """
-        if pyscript.sync.stopped():
-            raise TimeoutError("Stopped by user")
+        if time.time() - self.start > 30:
+            raise TimeoutError("Ran more than 30 seconds.")
         if frame.f_code.co_filename != "<string>":
             return False
         self.lineno = frame.f_lineno
@@ -201,12 +193,7 @@ def load_choices():
 
 def publish(topic, data):
     """ Publishes data to the main process. """
-    polyscript.xworker.sync.publish(
-        "Worker",
-        "Main",
-        topic,
-        data
-    )
+    polyscript.xworker.sync.publish("Worker", "Main", topic, data)
 
 
 def load(name):
@@ -228,8 +215,6 @@ def handle_request(sender, topic, request):
     if topic == "run":
         script, visualization = json.loads(request)
         Runner(script, visualization)
-    elif topic == "stop":
-        Runner.stop()
     elif topic == "load":
         load(json.loads(request))
     else:
@@ -238,7 +223,6 @@ def handle_request(sender, topic, request):
 
 polyscript.xworker.sync.handler = handle_request
 polyscript.xworker.sync.subscribe("Worker", "run", "pyodide-worker")
-polyscript.xworker.sync.subscribe("Worker", "stop", "pyodide-worker")
 polyscript.xworker.sync.subscribe("Worker", "load", "pyodide-worker")
 
 sys.path.append("/home/pyodide/visualizations")
