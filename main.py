@@ -182,8 +182,8 @@ def load(_event=None):
         for category, choices in sorted(state.choices.value.items(), key=lambda x: -len(x[1]))
     ]).attr("title", "Load...").addClass("choice-dialog").dialog(ltk.to_js({
         "width": 900,
+        "modal": True
     }))
-
 
 def load_source(sources):
     """ Load the algorithm and visualization """

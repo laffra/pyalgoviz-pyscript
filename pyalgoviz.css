@@ -234,4 +234,10 @@
     height: 22px;
     overflow: hidden;
     text-overflow: ellipsis;
+    border-radius: 12px;
+    white-space: nowrap;
+    padding: 0 8px;
+    background-color: #dd8028;
+    border: 1px solid #255586;
+    color: white;
 }
