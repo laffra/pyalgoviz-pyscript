@@ -36,7 +36,6 @@ class Runner():
         self.lineno = 0
         self.global_state = self.get_state(self.algo_print)
         self.viz_state = self.get_state(self.viz_print)
-        self.start = time.time()
         self.script = script
         self.visualization = visualization
         self.run()
@@ -44,6 +43,7 @@ class Runner():
     def run(self):
         """ Runs the script. """
         try:
+            self.start = time.time()
             sys.settrace(self.step)
             exec(self.script, self.global_state, self.global_state)
         except Exception as e:

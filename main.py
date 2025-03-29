@@ -28,6 +28,7 @@ class State(ltk.Model):
     step_count = 0
     choices = {}
     speed = 1
+    running = False
 
     def changed(self, name, value):
         try:
@@ -48,14 +49,13 @@ progress.on("slide", ltk.proxy(lambda *args: progress.trigger("change")))
 def run(_event=None):
     """ Run the current algorithm """
     clear_steps()
+    start_running()
     ltk.publish(
         "Main",
         "Worker",
         "run",
         [editor_algo.get(), editor_viz.get()]
     )
-    ltk.find("#run-button").attr("disabled", True)
-    ltk.find(".play-button").attr("disabled", True)
     ltk.window.clear()
     ltk.window.text(15, 125, "Running...", 20, "Arial", "green")
 
@@ -91,12 +91,25 @@ def clear_steps():
     ltk.find(".log-algo .log-line").empty()
     ltk.window.init()
     ltk.window.text(15, 125, "Loading...", 20, "Arial", "green")
-    
+     
+
+def start_running():
+    """ The running algorithm started """
+    state.running = True
+    ltk.find(".run-button").attr("disabled", True)
+    ltk.find(".play-button").attr("disabled", True)
+
+
+def stop_running():
+    """ The running algorithm stopped """
+    state.running = False
+    ltk.find(".run-button").attr("disabled", False)
+    ltk.find(".play-button").attr("disabled", False)
+
 
 def log(data):
     """ Show the print statements made by the algorithm """
-    ltk.find("#run-button").attr("disabled", False)
-    ltk.find(".play-button").attr("disabled", False)
+    stop_running()
     progress.element.slider("option", "max", str(state.step_count))
     for line in data:
         ltk.find(".log-algo").append(
@@ -114,17 +127,27 @@ def show_error(data):
             .addClass("log-line log-error")
     )
 
+def toggle_play():
+    """ Toggle the play button """
+    if ltk.find(".play-button").text() == "❚❚":
+        state.running = False
+        ltk.find(".play-button").text("▶").removeClass("running")
+    else:
+        state.running = True
+        ltk.find(".play-button").text("❚❚").addClass("running")
+        play(0 if int(state.step) >= int(state.step_count) else state.step)
 
 def play(step):
     """ Play the animation """
+    if not state.running:
+        return
     state.step = step
-    render_current()
     if step < int(state.step_count):
         delay = [ 0.3, 0.05, 0][state.speed]
         ltk.schedule(lambda: play(state.step + 1), "play next step", delay)
-        ltk.find(".play-button").attr("disabled", True)
     else:
-        ltk.find(".play-button").attr("disabled", False)
+        ltk.find(".play-button").text("▶").removeClass("running")
+    render_current()
 
 
 def visit(category, name):
@@ -220,10 +243,9 @@ def setup_ui():
                     editor_algo,
                     ltk.HBox(
                         ltk.Button("run", run)
-                            .attr("id", "run-button")
-                            .addClass("big-button"),
+                            .addClass("run-button big-button"),
                         ltk.HBox(
-                            ltk.Button("Play", lambda event: play(0))
+                            ltk.Button("▶", lambda event: toggle_play())
                                 .addClass("play-button"),
                             speed,
                             progress.addClass("progress"),

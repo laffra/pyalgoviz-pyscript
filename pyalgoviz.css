@@ -21,12 +21,119 @@
 
 .progress {
     width: 150px;
-    margin: 4px 16px 4px 8px;
+    margin: 6px 16px 4px 8px;
+
 }
 
 .big-button {
-    height: 30px;
+    height: 34px;
+    width: 80px;
     font-size: 16px;
+    border-radius: 16px;
+    padding: 0 8px;
+    background-color: #429ffd;
+    border: 1px solid #255586;
+    color: white;
+}
+
+.ui-tabs .ui-tabs-active {
+    background-color: #429ffd;
+}
+
+.play-button {
+    width: 30px;
+    height: 24px;
+    background-color: rgb(198, 255, 176);
+    border: 1px solid rgb(84, 143, 61);
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.ltk-button:disabled {
+    background-color: rgb(224, 224, 224);
+}
+
+.button-box .running {
+    background-color: rgb(253, 218, 224);
+}
+
+.button-box {
+    background-color: rgb(254, 254, 234);
+    border: 1px solid gray;
+    border-radius: 8px;
+    gap: 8px;
+    padding: 4px 10px;
+}
+
+.progress .ui-slider-handle {
+    width: fit-content;
+    min-width: 10px;
+}
+
+.progress .step-number {
+    position: relative;
+    top: -3px;
+    font-size: 10px;
+}
+
+.ltk-button {
+    min-width: 0;
+}
+
+.editor, .log-viz, .log-algo {
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+.editor_line {
+    background-color: rgb(207, 214, 217)
+}
+
+.log-algo {
+    width: 100%;
+    height: 100%;
+}
+
+.error, .log-error {
+    display: block;
+    color: red;
+    font-size: 13px;
+    margin-top: 12px;
+}
+
+.log-viz {
+    width: 100%;
+    height: 100%;
+}
+
+.ui-dialog {
+    z-index: 10000;
+}
+
+.name {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.author {
+    margin-bottom: 16px;
+}
+
+.ui-tabs .ui-tabs-panel {
+    padding: 0 8px;
+}
+
+.ui-dialog .ui-dialog-content {
+    background-color: #007fff;
+    border-radius: 16px;
+}
+
+.ltk-button:disabled {
+    background-color: rgb(224, 224, 224);
+}
+
+.button-box .running {
+    background-color: rgb(253, 218, 224);
 }
 
 .button-box {
