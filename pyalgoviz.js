@@ -104,6 +104,20 @@ function p(string) {
 const audioContext = new (window.AudioContext || window.webkitAudioContext)()
 
 function s(frequency=440, duration=10) {
+    const oscillator = audioContext.createOscillator()
+    const gainNode = audioContext.createGain()
+    
+    oscillator.connect(gainNode)
+    gainNode.connect(audioContext.destination)
+    
+    oscillator.frequency.value = frequency
+    oscillator.type = 'sine'
+    
+    gainNode.gain.setValueAtTime(0.5, audioContext.currentTime)
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration/1000)
+    
+    oscillator.start()
+    oscillator.stop(audioContext.currentTime + duration/1000)
 }
 
 barchart = b;

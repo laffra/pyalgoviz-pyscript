@@ -42,4 +42,4 @@ def __visualization():
     line(x, 200, x, 175, color, 3)
     text(x-9, 223, msg, 18, color=color)
 
-    beep(n * 100, 50)
+    if __lineno__ == 3: beep(200 + n * 100, 500)

@@ -42,7 +42,9 @@ def __algorithm():
     print('longest path =', path)
 
 def __visualization():
-    beep(v*30, 100)
+    if __lineno__ == 11: beep(600, 40)
+    if __lineno__ == 17: beep(d1*100, 200)
+    if __lineno__ == 18: beep(d2*100, 200)
 
     def showTree(x, y, px, py, w, treeNode):
         if treeNode:

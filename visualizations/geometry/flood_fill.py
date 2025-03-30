@@ -38,14 +38,16 @@ def __algorithm():
     flood(grid, 0, 0)
 
 def __visualization():
+    progress = 1
+
     for i, row in enumerate(grid):
         for j, room in enumerate(row):
-            fill = {'*': 'pink',
-                     '.': 'white',
-                     '#': 'black'
-                     }[room]
+            fill = {'*': 'pink', '.': 'white', '#': 'black'}[room]
+            if fill == "pink": progress += 1
             rect(40*j + 5, 40*i + 5, 40, 40, fill=fill, border='black')
             text(40*j + 20, 40*i + 28, room, size=15, font='Arial', color='black')
-        
-        
+
+    if __lineno__ == 16: beep(300 + progress * 50, 200)
+    if __lineno__ == 15 and not can_be_filled: beep(300, 200)
+
     text(20, 320, "FLOOD FILL", size=90)

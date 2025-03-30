@@ -53,7 +53,7 @@ def __visualization():
             color = 'brown' if node[V]==newValue else 'orange' if node==x else 'teal'
             circle(tx-5, ty-9, 15, color)
             text(tx-15, ty-5, node[V], 17, 'Arial', 'white')
-            beep(newValue*100, 10)
+            if __lineno__ == 14: beep(max(ld,rd)*100, 200)
 
     rect(10, 22, 205, 40, '#333')
     text(20, 52, 'AVL Tree', 30, color='lightblue')
