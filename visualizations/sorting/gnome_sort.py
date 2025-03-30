@@ -52,5 +52,4 @@ def __visualization():
     show('i', i, 320, 'red')
     show('j', j, 360, 'blue')
 
-    beep(200 + i * 50, 200)
-    beep(j * 100, 10)
+    if __lineno__ == 4:	beep(200 + j * 50, 50)

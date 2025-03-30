@@ -43,5 +43,4 @@ def __visualization():
     line(x, 200, x, 165, 'orange' if odd else 'blue', 3)
     text(x+3, 203, '%s = %d' % ('odd' if odd else 'even', n))
 
-    beep(data[swapped] * 100, 50)
-    beep(swapped * 100, 50)
+    beep(200 + n * 100, 50)

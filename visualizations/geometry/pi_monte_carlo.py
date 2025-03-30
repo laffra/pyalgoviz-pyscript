@@ -18,7 +18,7 @@ def __algorithm():
 
     inside = []
     outside = []
-    total = 2000
+    total = 500
 
     for i in range(total):
         x, y = (random.random() * 2) - 1, (random.random() * 2) - 1
@@ -35,6 +35,7 @@ def __visualization():
             circle(300 + x * 220, 223 + y * 220, 5, "green")
         for x,y in outside:
             circle(300 + x * 220, 223 + y * 220, 5, "red")
-        text(145, 550, "PI=%.10f" % pi, size=25)
+        text(145, 500, "PI=%.10f" % pi, size=25)
     else:
-        text(145, 250, "Dart %d/%d, PI=%.10f" % (i, total, pi), size=25)
+        text(145, 250, "Dart %d/%d" % (i, total), size=25)
+        if __lineno__ == 9 and i % 50 == 0: beep(200 + i * 4, 2000)

@@ -41,3 +41,4 @@ def __visualization():
     rect(X, 72, 395, 40, '#333')
     text(X+15, 102, 'Fibonacci Series Generator', 30, color='lightblue')
     drawGrid()
+    beep(200 + a * 100, 200)

@@ -44,7 +44,7 @@ def __algorithm():
 def __visualization():
     barchart(50, 60, 460, 150, data, highlight=j, scale=45)
 
-    beep(mid * 100, 10)
+    if __lineno__ == 6: beep((k-i) * 20, 1000)
 
     def show(name, index, y, color):
         x = 53+index*460/len(data)

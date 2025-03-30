@@ -31,6 +31,10 @@ def __algorithm():
 
 def __visualization():
     import math
+
+    if __lineno__ == 6: beep(400 + n * 15, 500)
+    if __lineno__ == 15: beep(400 + (100 - len(result)) * 15, 500)
+
     barchart(20, 20, 500, 210, numbers, scale=2)
     text(200, 35, 'Unordered List of Tasks')
 

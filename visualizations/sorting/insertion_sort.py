@@ -58,4 +58,4 @@ def __visualization():
     show('i', i, 220, 'blue')
     show('j', j, 260, 'red')
 
-    beep(j * 50, 1000)
+    if __lineno__ == 6: beep(300 + j * 50, 300)

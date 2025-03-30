@@ -53,3 +53,5 @@ def __visualization():
         
     chart('Before:', original, 100)
     chart('After:', data, 335, True)
+
+    beep(300 + step * 50, 200)

@@ -39,6 +39,8 @@ def __algorithm():
 def __visualization():
     X, Y, D = 100, 130, 40
 
+    if __lineno__ == 12: beep(300 + n*10, 500)
+
     def drawGrid():
         for y in range(10):
             for x in range(10):
