@@ -30,6 +30,8 @@ def __algorithm():
 def __visualization():
     number, perm = permutation
 
+    beep(300+__lineno__*50, 300)
+
     text(35, 70, 'Input:', 21)
     for n,c in enumerate(input):
         color = 'orange' if c == perm[0] else 'lightyellow'

@@ -43,6 +43,8 @@ def __algorithm():
     #
 
 def __visualization():
+    beep(200+__lineno__*40, 300)
+    
     def show(s, y, label, color):
         text(30, y+20, label, 20, 'Arial', 'teal')
         for n,c in enumerate(s):

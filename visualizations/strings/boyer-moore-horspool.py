@@ -55,6 +55,8 @@ def __visualization():
     box_width = 20
     box_height = 20
 
+    beep(200+__lineno__*40, 300)
+
     def box_text(x, y, c, color):
         rect(x, y, box_width, box_height, fill=color)
         text(x + 6, y + 14, c)

@@ -59,6 +59,8 @@ def __algorithm():
         print('%3s ==> %3s : %s ==> %s' % (word,match[1],result,matches))
 
 def __visualization():
+    beep(300+__lineno__*50, 300)
+
     def showTree(x, y, px, py, node, key=None):
         if px: 
             line(px, py+15, px, y+5, '#AAA', 3)

@@ -43,6 +43,8 @@ def __algorithm():
         print(target, '==>', correction)
 
 def __visualization():
+    beep(300+__lineno__*50, 300)
+
     vars = [[ 'DICT:', DICT],
             [ 'NWORDS:', {k:NWORDS[k] for k in NWORDS}],
             [ 'target:', target],
