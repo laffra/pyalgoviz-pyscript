@@ -46,6 +46,7 @@ def __visualization():
             text(x1-21 if name == 'left' else x2+20, 195, name)
             rect(x1, 180, x2-x1+w, 20, color, color)
     
-
     segment(right, rightEnd, 'right', 'teal')
     segment(left, leftEnd, 'left', 'orange')
+
+    if __lineno__ == 9: beep(200 + (right-left) * 100, 500)
