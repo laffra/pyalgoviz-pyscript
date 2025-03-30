@@ -63,3 +63,4 @@ def __visualization():
     rect(0, 0, 600, 50, 'white', 'white')
     text(250, 300, 'P', 25)
     text(130, 190, 'NP', 25)
+    if __lineno__ == 5: beep(300+elements.index(e)*50, 300)

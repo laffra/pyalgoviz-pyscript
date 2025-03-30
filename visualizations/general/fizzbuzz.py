@@ -20,7 +20,8 @@ def __algorithm():
                 x)
             
     for x in range(1,101):
-        print(x, fizzbuzz(x))
+        result = fizzbuzz(x)
+        print(x, result)
 
 def __visualization():
     def draw(SIZE):
@@ -35,3 +36,8 @@ def __visualization():
             text(px, py, fb, 20, "Arial", color)
         
     draw(15)  # try also with 9
+
+    if __lineno__ == 9:
+        if result == "fizzbuzz": beep(1500, 1000)    
+        if result == "fizz": beep(800, 1000)    
+        if result == "buzz": beep(300, 1000)
