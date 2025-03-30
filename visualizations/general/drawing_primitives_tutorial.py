@@ -16,8 +16,8 @@ def __algorithm():
     # generate some numbers for x, y, and n
 
     for k in range(20):
-        for x in range(50, 500, 50):
-            for y in range(50, 400, 50):
+        for x in range(50, 500, 100):
+            for y in range(50, 400, 100):
                 n = y // 50
 
 def __visualization():
@@ -32,6 +32,6 @@ def __visualization():
     arc(100, 325, 30, (n - 1) * 2 * pi/4, n * 2 * pi/4, "orange", 3)
 
     if __lineno__ == 3:
-        beep(x, 100)
+        beep(500 + k * 50, 1000)
 
     # Click on the Help button to see all drawing primitives.
