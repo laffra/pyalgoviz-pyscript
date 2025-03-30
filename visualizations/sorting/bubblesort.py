@@ -44,3 +44,5 @@ def __visualization():
 
     rect(35, 330, 490, 40, '#333')
     text(200, 360, 'Bubble Sort', 30, color='lightblue')
+
+    if __lineno__ == 3: beep(400 + j * 20, 100)
