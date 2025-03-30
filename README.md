@@ -2,7 +2,7 @@
 
 This is the PyScript version of [PyAlgoViz](https://github.com/laffra/pyalgoviz).
 
-![bubblesort.gif](bubblesort.gif)
+![goldenratio.gif](goldenratio.gif)
 
 A live preview is hosted at [Github Pages](https://laffra.github.io/pyalgoviz-pyscript/?name=numbers/fibonacci_golden_ratio).
 
