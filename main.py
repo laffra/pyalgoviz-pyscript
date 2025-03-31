@@ -197,15 +197,17 @@ def load_source(sources):
     ltk.find(".log-algo").append(
         ltk.Heading1(name.replace("_", " "))
             .addClass("name"),
-        ltk.Div(
-            "See <a target='_blank' "
-            f"href='{home}/blob/main/visualizations/{filename}'>{filename}</a>."
-            "in the open-source project "
-            "<a target=_blank "
-            f"href='{home}'>PyAlgoViz-PyScript</a>."
-        ).element,
         ltk.Text(f"Author: {author}")
             .addClass("author"),
+        ltk.Div(
+            "PyAlgoViz is an open-source project. See the repo: "
+            "<a target=_blank "
+            f"href='{home}'>PyAlgoViz-PyScript</a>.<br>"
+            "The available drawing primitives are shown in a <a target='_blank' "
+            f"href='http://127.0.0.1:3002/index.html?name=general/drawing_primitives_tutorial'>demo</a>"
+            " and defined <a target='_blank' "
+            f"href='https://github.com/laffra/pyalgoviz-pyscript/blob/main/primitives.py'>here</a>."
+        ).element,
     )
     run()
 
