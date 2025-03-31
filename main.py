@@ -105,6 +105,7 @@ def stop_running():
     state.running = False
     ltk.find(".run-button").attr("disabled", False)
     ltk.find(".play-button").attr("disabled", False)
+    ltk.schedule(lambda: toggle_play(None), "replay after the first run", 1)
 
 
 def log(data):
@@ -127,7 +128,8 @@ def show_error(data):
             .addClass("log-line log-error")
     )
 
-def toggle_play():
+@ltk.callback
+def toggle_play(event):
     """ Toggle the play button """
     if ltk.find(".play-button").text() == "❚❚":
         state.running = False
@@ -143,7 +145,7 @@ def play(step):
         return
     state.step = step
     if step < int(state.step_count):
-        delay = [ 0.3, 0.05, 0][state.speed]
+        delay = [ 0.3, 0.04, 0][state.speed]
         ltk.schedule(lambda: play(state.step + 1), "play next step", delay)
     else:
         ltk.find(".play-button").text("▶").removeClass("running")
@@ -245,7 +247,7 @@ def setup_ui():
                         ltk.Button("run", run)
                             .addClass("run-button big-button"),
                         ltk.HBox(
-                            ltk.Button("▶", lambda event: toggle_play())
+                            ltk.Button("▶", toggle_play)
                                 .addClass("play-button"),
                             speed,
                             progress.addClass("progress"),
