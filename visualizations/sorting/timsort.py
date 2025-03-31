@@ -13,14 +13,12 @@ __name = "Sorting - TimSort"
 __author = "chris@chrislaffra.com"
 
 def __algorithm():
+    import random
+
     def timSort(data):
         data.sort()        # Call TimSort, the Python list.sort
 
-    data = [
-       24, 30, 20, 15, 25, 1, 8, 7, 37, 16, 
-       21, 2, 12, 22, 34, 33, 14, 38, 39, 18, 
-       36, 28, 17, 4, 32, 13, 40, 35, 6, 5, 
-    ]
+    data = random.sample(range(100), 100)
 
     for n in data:
         print(n,)
@@ -38,8 +36,8 @@ def __algorithm():
     # Worst case space complexity    O(n)
 
 def __visualization():
-    barchart(50, 20, 510, 300, data, highlight=data.index(n), scale=6)
+    barchart(50, 20, 510, 300, data, highlight=data.index(n), scale=3)
 
     text(120, 350, 'TimSort is the Python built-in list.sort', 22)
 
-    if __lineno__ in [11, 16]: beep(200 + n*100, 50)
+    if __lineno__ in [9, 14]: beep(200 + n*35, 50)
