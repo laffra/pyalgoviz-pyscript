@@ -44,4 +44,4 @@ def __visualization():
 
     text(120, 350, 'TimSort is the Python built-in list.sort', 22)
 
-    beep(n*200, 10)
+    if __lineno__ in [11, 17]: beep(200 + n*100, 50)

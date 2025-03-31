@@ -42,7 +42,6 @@ def __visualization():
     #
     #  visualize the above list as a barchart, while being sorted
     #  
-
-    barchart(50, 25, 480, 400, data, highlight=i, scale=10)
-
-    beep(i * 100, 50)
+    if __lineno__ == 8:
+        beep(400 + i * 20, 100)
+        barchart(50, 25, 480, 400, data, highlight=i, scale=10)
