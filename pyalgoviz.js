@@ -103,7 +103,7 @@ function p(string) {
 
 const audioContext = new (window.AudioContext || window.webkitAudioContext)()
 
-function s(frequency=440, duration=10) {
+function s(frequency, duration) {
     const oscillator = audioContext.createOscillator()
     const gainNode = audioContext.createGain()
     
@@ -113,7 +113,7 @@ function s(frequency=440, duration=10) {
     oscillator.frequency.value = frequency
     oscillator.type = 'sine'
     
-    gainNode.gain.setValueAtTime(0.5, audioContext.currentTime)
+    gainNode.gain.setValueAtTime(0.005, audioContext.currentTime)
     gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration/1000)
     
     oscillator.start()
