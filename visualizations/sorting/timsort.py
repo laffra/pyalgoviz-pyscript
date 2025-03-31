@@ -24,13 +24,11 @@ def __algorithm():
 
     for n in data:
         print(n,)
-    print
 
     timSort(data)
 
     for n in data:
         print(n,)
-    print
 
     # See: http://en.wikipedia.org/wiki/Timsort
     #
@@ -44,4 +42,4 @@ def __visualization():
 
     text(120, 350, 'TimSort is the Python built-in list.sort', 22)
 
-    if __lineno__ in [11, 17]: beep(200 + n*100, 50)
+    if __lineno__ in [11, 16]: beep(200 + n*100, 50)
