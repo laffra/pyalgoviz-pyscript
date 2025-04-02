@@ -33,6 +33,8 @@ def __algorithm():
 def __visualization():
     from math import pi
 
+    beep(220 + len(numbers)*20, 300)
+    
     R,U,L,D = A = range(4)
     dir,angle,x,y = D,pi,150,170
     scale = min(10.0, 60.0/sum(numbers))
@@ -70,4 +72,3 @@ def __visualization():
         text(470, y, p, size=size)
         y += size + 2
     
-    beep(len(numbers)*30, 3000)
