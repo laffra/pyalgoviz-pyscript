@@ -33,8 +33,8 @@ def __algorithm():
 def __visualization():
     from math import pi
 
-    beep(220 + len(numbers)*20, 300)
-    
+    beep(frequency=220 + len(numbers)*20, duration=300)
+
     R,U,L,D = A = range(4)
     dir,angle,x,y = D,pi,150,170
     scale = min(10.0, 60.0/sum(numbers))
